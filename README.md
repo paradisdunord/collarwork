@@ -1,2 +1,2 @@
-# collarwork
-Collarwork Design Homepahe
+# Collarwork Studio
+Collarwork Design Studio Homepage
