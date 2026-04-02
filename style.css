@@ -831,3 +831,104 @@ ul {
   }
 }
 
+/* ═══════════════════════════ LIGHTBOX MODAL ═══════════════════════════ */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.modal.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.4); /* Much less dark, 75% lighter */
+  cursor: pointer;
+}
+
+.modal-content {
+  position: relative;
+  z-index: 2001;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.modal-img {
+  max-width: 85%; /* Slightly smaller width */
+  max-height: 65vh; /* Slightly smaller height */
+  margin: 0 auto; /* Center the smaller image */
+  object-fit: contain;
+  pointer-events: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.modal-body {
+  margin-top: 1.5rem;
+  color: #fff;
+  pointer-events: auto;
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+
+.modal-desc {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.modal-close {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 0.5rem;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+  pointer-events: auto;
+}
+
+.modal-close:hover {
+  opacity: 1;
+}
+
+.modal-close svg {
+  width: 24px;
+  height: 24px;
+}
+
+@media (max-width: 768px) {
+  .modal-close {
+    top: -40px;
+    right: 0;
+  }
+}

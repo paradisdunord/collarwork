@@ -54,14 +54,14 @@ document.addEventListener('DOMContentLoaded', () => {
           document.body.style.transform = `translateY(${-targetY}px)`;
         } else {
           window.scrollTo(0, targetY);
-          document.body.style.transform = `translateY(0px)`;
+          document.body.style.transform = '';
         }
 
         if (progress < duration) {
           requestAnimationFrame(step);
         } else {
           window.scrollTo(0, 0);
-          document.body.style.transform = 'translateY(0px)';
+          document.body.style.transform = '';
         }
       };
 
@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     track.addEventListener('mouseenter', () => {
+      if (isDrifting) return;
       isDrifting = true;
       track.style.scrollSnapType = 'none'; 
       scrollAcc = 0; 
@@ -120,6 +121,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnNext.addEventListener('click', () => {
       track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+    });
+  }
+
+  // 5. Portfolio Lightbox Modal
+  const portfolioCards = document.querySelectorAll('.portfolio-card');
+  const modal = document.getElementById('portfolio-modal');
+  const modalImg = document.getElementById('modal-img');
+  const modalTitle = document.getElementById('modal-title');
+  const modalDesc = document.getElementById('modal-desc');
+  const modalClose = document.getElementById('modal-close');
+  const modalOverlay = document.getElementById('modal-overlay');
+
+  if (modal) {
+    const closeModal = () => {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    };
+
+    portfolioCards.forEach(card => {
+      // Use cursor pointer to indicate clickability
+      card.style.cursor = 'pointer';
+      
+      card.addEventListener('click', (e) => {
+        // Find elements inside the card
+        const img = card.querySelector('.portfolio-card-img');
+        const title = card.querySelector('.portfolio-card-title');
+        const desc = card.querySelector('.portfolio-overlay-content p');
+
+        // Populate modal
+        if (img) modalImg.src = img.src;
+        if (title) modalTitle.textContent = title.textContent;
+        if (desc) modalDesc.textContent = desc.textContent;
+
+        // Open modal
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (modalOverlay) modalOverlay.addEventListener('click', closeModal);
+
+    // Also close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+        closeModal();
+      }
     });
   }
 
