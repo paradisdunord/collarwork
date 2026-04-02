@@ -745,6 +745,13 @@ ul {
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
+  .nav-logo {
+    align-self: flex-start;
+  }
+  .nav-logo .logo-img {
+    height: 64px !important;
+    width: auto !important;
+  }
   .nav-links, .nav-cta {
     display: none;
   }

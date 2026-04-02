@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 1. Mobile Navigation Toggle
   const navToggle = document.getElementById('nav-toggle');
   const navLinks = document.getElementById('nav-links');
+  const navLinkItems = document.querySelectorAll('.nav-link');
 
   if (navToggle && navLinks) {
     navToggle.addEventListener('click', () => {
@@ -15,6 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
       navLinks.style.background = '#fafafa';
       navLinks.style.padding = '2rem';
       navLinks.style.borderBottom = '1px solid var(--border-color)';
+    });
+
+    // Close mobile menu when a nav link is clicked
+    navLinkItems.forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+          navLinks.removeAttribute('style');
+        }
+      });
     });
   }
 

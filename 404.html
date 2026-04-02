@@ -1,28 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/path/to/main/styles.css">
-    <title>404 - Page Not Found</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="404 - Page not found." />
+  <title>404 Not Found | Collarwork</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=3" />
+  <link rel="icon" type="image/svg+xml" href="images/logos/favicon_collarwork.svg" />
 </head>
 <body>
-    <header>
-        <nav class="navigation-header">
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main class="hero">
-        <h1 class="hero-title">404</h1>
-        <p class="hero-message">We're sorry, but the page you are looking for does not exist.</p>
-        <a class="home-link" href="/">Return to Home Page</a>
-    </main>
-    <footer class="footer">
-        <p>&copy; 2026 Collarwork. All rights reserved.</p>
-    </footer>
+
+  <!-- ═══════════════════════════════ NAV ═══════════════════════════════ -->
+  <header class="site-header" id="top">
+    <nav class="nav container">
+      <a href="index.html" class="nav-logo">
+        <picture>
+          <source media="(max-width: 768px)" srcset="images/logos/logo-flag.svg">
+          <img src="images/logos/logo-simple-blue.svg" alt="Collarwork Design" class="logo-img"
+            style="height: 32px; width: auto;" />
+        </picture>
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html#portfolio" class="nav-link">Portfolio</a></li>
+        <li><a href="index.html#services" class="nav-link">Services</a></li>
+        <li><a href="index.html#work-with-us" class="nav-link">Work with Us</a></li>
+        <li><a href="index-fr.html" class="nav-link" style="font-weight: 700;">FR</a></li>
+      </ul>
+      <a href="index.html#work-with-us" class="btn btn-primary nav-cta">Start a Project</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main class="legal-main" style="min-height: 60vh; display: flex; align-items: center; justify-content: center;">
+    <div class="container" style="text-align: center;">
+      <div class="hero-label" style="justify-content: center;"><span class="utility-label">Error 404</span></div>
+      <h1 class="hero-headline" style="margin-top: 0.5rem;">DEAD <em class="hero-accent">END.</em></h1>
+      <p class="hero-body" style="margin: 0 auto 2rem; max-width: 500px;">The page you're looking for doesn't exist or has been moved. Let's get you back to the blueprint.</p>
+      <a href="index.html" class="btn btn-primary">
+        Return to Home
+        <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════ FOOTER ═══════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="index.html#top" class="nav-logo footer-logo">
+          <img src="images/logos/logo-simple-white.svg" alt="Collarwork Design" class="logo-img"
+            style="height: 32px; width: auto;" />
+        </a>
+        <p class="footer-tagline">From the north.</p>
+      </div>
+      <div class="footer-links-group">
+        <span class="utility-label footer-group-label">Navigation</span>
+        <ul class="footer-links">
+          <li><a href="index.html#portfolio">Portfolio</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="index.html#work-with-us">Work with Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-links-group">
+        <span class="utility-label footer-group-label">Legal</span>
+        <ul class="footer-links">
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div class="footer-links-group">
+        <span class="utility-label footer-group-label">Social</span>
+        <ul class="footer-links">
+          <li><a href="https://www.instagram.com/collarworkdesign/" target="_blank" rel="noopener">Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom container">
+      <span class="utility-label footer-copy">© 2021 Collarwork Design (collarworkdesign.com). All rights
+        reserved.</span>
+      <span class="utility-label footer-copy">Built with precision.</span>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
 </body>
 </html>
