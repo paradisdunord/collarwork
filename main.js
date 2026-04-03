@@ -146,14 +146,14 @@ document.addEventListener('DOMContentLoaded', () => {
     portfolioCards.forEach(card => {
       // Use cursor pointer to indicate clickability
       card.style.cursor = 'pointer';
+
+      // Pre-query elements inside the card for performance optimization
+      const img = card.querySelector('.portfolio-card-img');
+      const title = card.querySelector('.portfolio-card-title');
+      const desc = card.querySelector('.portfolio-overlay-content p');
       
       card.addEventListener('click', (e) => {
-        // Find elements inside the card
-        const img = card.querySelector('.portfolio-card-img');
-        const title = card.querySelector('.portfolio-card-title');
-        const desc = card.querySelector('.portfolio-overlay-content p');
-
-        // Populate modal
+        // Populate modal with pre-queried data
         if (img) modalImg.src = img.src;
         if (title) modalTitle.textContent = title.textContent;
         if (desc) modalDesc.textContent = desc.textContent;
