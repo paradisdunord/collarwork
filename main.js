@@ -28,10 +28,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Removed cheesy scroll-reveal effects. Collarwork is rugged and static.
-
   // 2. Hyper-Fast Scroll to Top with Elastic Bump (Logo click)
   const navLogos = document.querySelectorAll('.nav-logo');
+
+  // Custom Elastic Ease Out Back
+  const easeOutBackC1 = 3.0; // High overshoot multiplier for a solid bump
+  const easeOutBackC3 = easeOutBackC1 + 1;
+  const easeOutBack = (t) => {
+    return 1 + easeOutBackC3 * Math.pow(t - 1, 3) + easeOutBackC1 * Math.pow(t - 1, 2);
+  };
+
   navLogos.forEach(logo => {
     logo.addEventListener('click', (e) => {
       e.preventDefault();
