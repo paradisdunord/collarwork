@@ -117,17 +117,6 @@ ul {
   letter-spacing: -0.02em;
 }
 
-.logo-mark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  background-color: var(--accent-blue);
-  color: #fff;
-  font-size: 0.8rem;
-}
-
 .nav-links {
   display: flex;
   gap: 2.5rem;
