@@ -748,7 +748,7 @@ ul {
   .nav-logo {
     align-self: flex-start;
   }
-  .nav-logo .logo-img {
+  .site-header .nav-logo .logo-img {
     height: 64px !important;
     width: auto !important;
   }
@@ -775,6 +775,21 @@ ul {
   }
   .footer-inner {
     grid-template-columns: 1fr 1fr;
+  }
+  .footer-brand {
+    grid-column: span 2;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .service-item {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 2rem 0;
+  }
+  .service-arrow {
+    align-self: flex-start;
   }
 }
 
