@@ -1,8 +1,2 @@
-# Compiled binaries
-*.prg
-
-# Temporary build files
-build/
-dist/
-temp/
-tmp/
+node_modules/
+.DS_Store
