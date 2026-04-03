@@ -1,0 +1,8 @@
+# Compiled binaries
+*.prg
+
+# Temporary build files
+build/
+dist/
+temp/
+tmp/
