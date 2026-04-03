@@ -42,13 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const duration = 500; // Hyper fast (500ms)
       let startTime = null;
 
-      // Custom Elastic Ease Out Back
-      const easeOutBack = (t) => {
-        const c1 = 3.0; // High overshoot multiplier for a solid bump
-        const c3 = c1 + 1;
-        return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
-      };
-
       const step = (timestamp) => {
         if (!startTime) startTime = timestamp;
         const progress = timestamp - startTime;
