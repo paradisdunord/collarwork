@@ -406,12 +406,12 @@
             <div class="form-group">
               <label class="form-label" for="name">Full Name</label>
               <input class="form-input" type="text" id="name" name="name" placeholder="Your name" autocomplete="name"
-                required />
+                required maxlength="100" />
             </div>
             <div class="form-group">
               <label class="form-label" for="email">Email Address</label>
               <input class="form-input" type="email" id="email" name="email" placeholder="you@company.com"
-                autocomplete="email" required />
+                autocomplete="email" required maxlength="254" />
             </div>
             <div class="form-group">
               <label class="form-label" for="subject">Subject</label>
@@ -430,7 +430,7 @@
             <div class="form-group">
               <label class="form-label" for="brief">Project Brief</label>
               <textarea class="form-input form-textarea" id="brief" name="brief"
-                placeholder="Tell us about your project, timeline, and goals." rows="5" required></textarea>
+                placeholder="Tell us about your project, timeline, and goals." rows="5" required maxlength="5000"></textarea>
             </div>
             <button type="submit" class="btn btn-primary form-submit" id="form-submit">
               Send Brief

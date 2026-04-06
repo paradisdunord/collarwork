@@ -410,12 +410,12 @@
             <div class="form-group">
               <label class="form-label" for="name">Nom complet</label>
               <input class="form-input" type="text" id="name" name="name" placeholder="Votre nom" autocomplete="name"
-                required />
+                required maxlength="100" />
             </div>
             <div class="form-group">
               <label class="form-label" for="email">Courriel</label>
               <input class="form-input" type="email" id="email" name="email" placeholder="vocre@compagnie.com"
-                autocomplete="email" required />
+                autocomplete="email" required maxlength="254" />
             </div>
             <div class="form-group">
               <label class="form-label" for="subject">Sujet</label>
@@ -435,7 +435,7 @@
             <div class="form-group">
               <label class="form-label" for="brief">Détails du projet</label>
               <textarea class="form-input form-textarea" id="brief" name="brief"
-                placeholder="Décrivez-nous votre projet, votre échéancier et vos buts." rows="5" required></textarea>
+                placeholder="Décrivez-nous votre projet, votre échéancier et vos buts." rows="5" required maxlength="5000"></textarea>
             </div>
             <button type="submit" class="btn btn-primary form-submit" id="form-submit">
               Envoyer
