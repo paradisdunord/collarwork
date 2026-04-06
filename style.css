@@ -722,10 +722,22 @@ ul {
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  .nav-logo {
+  .service-item {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 2rem 0;
+  }
+  .service-num {
+    margin-bottom: 0.5rem;
+  }
+  .service-arrow {
+    margin-top: 1rem;
+  }
+
+  .site-header .nav-logo {
     align-self: flex-start;
   }
-  .nav-logo .logo-img {
+  .site-header .nav-logo .logo-img {
     height: 64px !important;
     width: auto !important;
   }
@@ -752,6 +764,9 @@ ul {
   }
   .footer-inner {
     grid-template-columns: 1fr 1fr;
+  }
+  .footer-brand {
+    grid-column: 1 / -1;
   }
 }
 
