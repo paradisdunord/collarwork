@@ -1,3 +1,10 @@
+// Anti-Clickjacking: Frame-busting script
+// Required because GitHub Pages doesn't allow X-Frame-Options headers
+// and CSP <meta> tags don't support the frame-ancestors directive.
+if (window.top !== window.self) {
+  window.top.location = window.self.location;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Mobile Navigation Toggle
