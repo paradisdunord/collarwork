@@ -10,6 +10,11 @@ const easeOutBack = (t) => {
   return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
 };
 
+// Expose globally for the browser
+if (typeof window !== 'undefined') {
+  window.easeOutBack = easeOutBack;
+}
+
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { easeOutBack };
 }
