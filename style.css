@@ -392,6 +392,8 @@ ul {
   flex: 0 0 calc(40% - 1.5rem); /* Desktop: show 2.5 items to hint scrolling */
   height: 550px; /* Fixed concise height to prevent tall scrolling */
   scroll-snap-align: start;
+  filter: blur(0.8px);
+  transform: scale(1.02);
 }
 
 /* Interactive Hover States */
