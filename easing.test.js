@@ -35,4 +35,12 @@ describe('easeOutBack', () => {
     // 1 - 0.032 + 0.12 = 1.088
     expect(easeOutBack(0.8)).toBeCloseTo(1.088);
   });
+
+  describe('error handling', () => {
+    test('should handle non-numeric inputs predictably by returning NaN', () => {
+      expect(Number.isNaN(easeOutBack("not a number"))).toBe(true);
+      expect(Number.isNaN(easeOutBack(undefined))).toBe(true);
+      expect(Number.isNaN(easeOutBack({}))).toBe(true);
+    });
+  });
 });
