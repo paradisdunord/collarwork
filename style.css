@@ -384,7 +384,8 @@ ul {
 .portfolio-card {
   border: 1px solid var(--border-color);
   background: #fff;
-  transition: transform 0.4s ease, border-color 0.4s ease;
+  /* ✨ UPDATED: Added opacity and filter to the transition for smooth spotlight fading */
+  transition: transform 0.4s ease, border-color 0.4s ease, opacity 0.4s ease, filter 0.4s ease;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -392,19 +393,28 @@ ul {
   flex: 0 0 calc(40% - 1.5rem); /* Desktop: show 2.5 items to hint scrolling */
   height: 550px; /* Fixed concise height to prevent tall scrolling */
   scroll-snap-align: start;
-  filter: blur(0.8px);
-  transform: scale(1.02);
 }
 
 /* Interactive Hover States */
 .portfolio-horizontal:hover .portfolio-card {
   border-color: #eee;
 }
+
 .portfolio-horizontal .portfolio-card:hover {
   border-color: var(--accent-blue);
   transform: translateY(-4px);
   z-index: 2;
   box-shadow: 0 10px 40px rgba(0,0,0,0.05); /* Soft pop effect */
+}
+
+/* ✨ NEW: The Spotlight Effect */
+/* Wrapped in hover media query so it doesn't break touch/mobile devices */
+@media (hover: hover) {
+  .portfolio-horizontal:hover .portfolio-card:not(:hover) {
+    opacity: 0.5;                  /* Dim the other cards */
+    filter: grayscale(80%) blur(2px); /* Desaturate and blur slightly */
+    transform: scale(0.98);        /* Push them back slightly */
+  }
 }
 
 /* Tablet Layout */
