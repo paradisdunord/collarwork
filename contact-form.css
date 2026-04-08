@@ -1,0 +1,540 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTACT FORM STYLES - Collarwork Design
+   Modern floating labels, validation states, and comprehensive project intake
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════ CONTACT HERO ═══════════════════════════════ */
+.contact-hero {
+  padding-top: 140px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid var(--border-color);
+  background: #fff;
+}
+
+.contact-hero-content {
+  max-width: 700px;
+}
+
+.contact-hero-headline {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin: 1rem 0 1.5rem;
+}
+
+.contact-hero-subtext {
+  font-size: 1.125rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+/* ═══════════════════════════ FORM SECTION ═══════════════════════════════ */
+.contact-form-section {
+  padding: 80px 0;
+}
+
+.contact-form-wrapper {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 60px;
+}
+
+@media (max-width: 992px) {
+  .contact-form-wrapper {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+/* ═══════════════════════════ SIDEBAR ════════════════════════════════════ */
+.contact-sidebar {
+  position: sticky;
+  top: 120px;
+  height: fit-content;
+}
+
+@media (max-width: 992px) {
+  .contact-sidebar {
+    position: relative;
+    top: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+  }
+}
+
+.contact-info-block {
+  margin-bottom: 40px;
+}
+
+.contact-info-block:last-child {
+  margin-bottom: 0;
+}
+
+.contact-details {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-main);
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+a.contact-detail-item:hover {
+  color: var(--accent-blue);
+}
+
+.contact-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--accent-blue);
+}
+
+.sidebar-text {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.process-list {
+  margin-top: 1rem;
+  counter-reset: none;
+}
+
+.process-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.process-list li:last-child {
+  border-bottom: none;
+}
+
+.process-num {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent-blue);
+  min-width: 24px;
+}
+
+/* ═══════════════════════════ FORM CONTAINER ═════════════════════════════ */
+.contact-form-container {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  padding: 40px;
+  position: relative;
+}
+
+@media (max-width: 600px) {
+  .contact-form-container {
+    padding: 24px;
+  }
+}
+
+/* ═══════════════════════════ FORM STATUS MESSAGES ═══════════════════════ */
+.form-status {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 40px;
+  min-height: 400px;
+}
+
+.form-status.is-visible {
+  display: flex;
+}
+
+.status-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.status-icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.success-icon {
+  background: rgba(41, 171, 226, 0.1);
+  color: var(--accent-blue);
+}
+
+.error-icon {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.status-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.status-message {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  max-width: 400px;
+}
+
+/* ═══════════════════════════ FORM SECTIONS ══════════════════════════════ */
+.form-section {
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.form-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.section-header-form {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 24px;
+}
+
+.section-number {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-blue);
+  background: rgba(41, 171, 226, 0.1);
+  padding: 0.25rem 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.section-title-form {
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* ═══════════════════════════ FORM ROWS ══════════════════════════════════ */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ═══════════════════════════ FLOATING LABELS ════════════════════════════ */
+.floating-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.floating-group:last-child {
+  margin-bottom: 0;
+}
+
+.floating-input {
+  width: 100%;
+  padding: 1.25rem 0 0.5rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text-main);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.floating-input:focus {
+  border-bottom-color: var(--accent-blue);
+}
+
+.floating-input.has-error {
+  border-bottom-color: #dc3545;
+}
+
+.floating-input.is-valid {
+  border-bottom-color: #28a745;
+}
+
+.floating-label {
+  position: absolute;
+  left: 0;
+  top: 1rem;
+  font-size: 1rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: all 0.2s ease;
+  transform-origin: left center;
+}
+
+/* Floating effect when input has focus or value */
+.floating-input:focus ~ .floating-label,
+.floating-input:not(:placeholder-shown) ~ .floating-label {
+  top: 0;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.floating-input:focus ~ .floating-label {
+  color: var(--accent-blue);
+}
+
+.floating-input.has-error ~ .floating-label {
+  color: #dc3545;
+}
+
+/* Select specific styles */
+.floating-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0 center;
+  padding-right: 24px;
+}
+
+.floating-select:focus {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2329ABE2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+.floating-select option {
+  color: var(--text-main);
+  background: #fff;
+  padding: 0.5rem;
+}
+
+/* Select label always floated since there's no placeholder */
+.select-label {
+  top: 0;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Date input specific styles */
+.floating-date {
+  cursor: pointer;
+}
+
+.date-label {
+  top: 0;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Textarea specific styles */
+.floating-textarea {
+  resize: vertical;
+  min-height: 100px;
+  padding-top: 1.5rem;
+}
+
+.textarea-label {
+  top: 0.5rem;
+}
+
+.floating-textarea:focus ~ .textarea-label,
+.floating-textarea:not(:placeholder-shown) ~ .textarea-label {
+  top: 0;
+}
+
+/* Required star */
+.required-star {
+  color: var(--accent-blue);
+}
+
+/* Input hints */
+.input-hint {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Error messages */
+.input-error {
+  display: none;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: #dc3545;
+}
+
+.floating-group.has-error .input-error {
+  display: block;
+}
+
+/* ═══════════════════════════ SUBMIT SECTION ═════════════════════════════ */
+.form-submit-section {
+  margin-top: 40px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.form-submit-btn {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  min-width: 200px;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.form-submit-btn .btn-loading {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form-submit-btn.is-loading .btn-text,
+.form-submit-btn.is-loading .btn-icon {
+  display: none;
+}
+
+.form-submit-btn.is-loading .btn-loading {
+  display: flex;
+}
+
+.form-submit-btn.is-loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* Spinner animation */
+.spinner {
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-circle {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 40;
+  stroke-linecap: round;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.form-disclaimer {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.form-disclaimer a {
+  color: var(--accent-blue);
+  text-decoration: underline;
+}
+
+.form-disclaimer a:hover {
+  text-decoration: none;
+}
+
+/* ═══════════════════════════ FORM HIDDEN STATE ══════════════════════════ */
+.project-form.is-hidden {
+  display: none;
+}
+
+/* ═══════════════════════════ RESPONSIVE ADJUSTMENTS ═════════════════════ */
+@media (max-width: 600px) {
+  .contact-hero {
+    padding-top: 120px;
+    padding-bottom: 40px;
+  }
+  
+  .contact-form-section {
+    padding: 40px 0;
+  }
+  
+  .form-section {
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+  }
+  
+  .section-header-form {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .form-submit-btn {
+    width: 100%;
+  }
+}
+
+/* ═══════════════════════════ FOCUS VISIBLE STATES ═══════════════════════ */
+.floating-input:focus-visible {
+  outline: none;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+/* ═══════════════════════════ ANIMATIONS ═════════════════════════════════ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-status.is-visible {
+  animation: fadeIn 0.4s ease;
+}
+
+.input-error {
+  animation: fadeIn 0.2s ease;
+}
+
+/* ═══════════════════════════ SHAKE ANIMATION FOR ERRORS ═════════════════ */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+.floating-group.shake {
+  animation: shake 0.4s ease;
+}
