@@ -1,4 +1,8 @@
-const { easeOutBack } = require('./easing');
+/**
+ * @jest-environment jsdom
+ */
+
+const { easeOutBack } = require('./main');
 
 describe('easeOutBack', () => {
   test('should return 0 when t is 0', () => {

@@ -346,7 +346,9 @@ const translations = {
 
 document.addEventListener('DOMContentLoaded', () => {
   // Determine language, default to 'en'
-  let currentLang = localStorage.getItem('collarwork_lang') || 'en';
+  let storedLang = localStorage.getItem('collarwork_lang');
+  // 🛡️ Sentinel: Validate stored language to prevent prototype pollution/XSS via innerHTML
+  let currentLang = (storedLang === 'fr') ? 'fr' : 'en';
   setLanguage(currentLang);
 
   // Setup toggle button
@@ -361,17 +363,20 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function setLanguage(lang) {
+  // 🛡️ Sentinel: Ensure lang is strictly 'en' or 'fr'
+  const safeLang = (lang === 'fr') ? 'fr' : 'en';
+
   // Store preference
-  localStorage.setItem('collarwork_lang', lang);
-  document.documentElement.lang = lang === 'en' ? 'en' : 'fr-CA';
+  localStorage.setItem('collarwork_lang', safeLang);
+  document.documentElement.lang = safeLang === 'en' ? 'en' : 'fr-CA';
 
   // Translate all elements with data-i18n
   const elements = document.querySelectorAll('[data-i18n]');
   elements.forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (translations[lang] && translations[lang][key]) {
+    if (translations[safeLang] && translations[safeLang][key]) {
       // Use innerHTML because some translations contain `<br>` or `<i>` tags
-      el.innerHTML = translations[lang][key];
+      el.innerHTML = translations[safeLang][key];
     }
   });
 
@@ -379,8 +384,8 @@ function setLanguage(lang) {
   const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
   placeholders.forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
-    if (translations[lang] && translations[lang][key]) {
-      el.placeholder = translations[lang][key];
+    if (translations[safeLang] && translations[safeLang][key]) {
+      el.placeholder = translations[safeLang][key];
     }
   });
 
@@ -388,10 +393,10 @@ function setLanguage(lang) {
   const metaDesc = document.querySelector('meta[name="description"]');
   const ogDesc = document.querySelector('meta[property="og:description"]');
   const twitterDesc = document.querySelector('meta[property="twitter:description"]');
-  if (metaDesc && translations[lang]["meta_desc"]) {
-    metaDesc.content = translations[lang]["meta_desc"];
-    if (ogDesc) ogDesc.content = translations[lang]["meta_desc"];
-    if (twitterDesc) twitterDesc.content = translations[lang]["meta_desc"];
+  if (metaDesc && translations[safeLang]["meta_desc"]) {
+    metaDesc.content = translations[safeLang]["meta_desc"];
+    if (ogDesc) ogDesc.content = translations[safeLang]["meta_desc"];
+    if (twitterDesc) twitterDesc.content = translations[safeLang]["meta_desc"];
   }
 }
 
