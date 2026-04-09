@@ -1,3 +1,25 @@
+/**
+ * Custom Elastic Ease Out Back function
+ * @param {number} t - Progress value from 0 to 1
+ * @returns {number} - Eased value
+ */
+const c1 = 3.0; // High overshoot multiplier for a solid bump
+const c3 = c1 + 1;
+
+const easeOutBack = (t) => {
+  return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+};
+
+// Expose globally for the browser
+if (typeof window !== 'undefined') {
+  window.easeOutBack = easeOutBack;
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { easeOutBack };
+}
+
+
 // Anti-Clickjacking: Frame-busting script
 // Required because GitHub Pages doesn't allow X-Frame-Options headers
 // and CSP <meta> tags don't support the frame-ancestors directive.
@@ -40,6 +62,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   navLogos.forEach(logo => {
     logo.addEventListener('click', (e) => {
+      // If the link points to index.html and we're NOT on the homepage, let standard navigation happen
+      const href = logo.getAttribute('href');
+      const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
+      if (href === 'index.html' && !isIndexPage) {
+        return; 
+      }
+
       e.preventDefault();
       
       const startY = window.scrollY;
@@ -180,6 +209,67 @@ document.addEventListener('DOMContentLoaded', () => {
         closeModal();
       }
     });
+  }
+
+  // 6. Contact Form AJAX Submission
+  const projectForm = document.getElementById('project-form');
+  const btnSubmit = document.getElementById('submit-btn');
+  const formSuccess = document.getElementById('form-success');
+  const formError = document.getElementById('form-error');
+
+  if (projectForm) {
+    projectForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Check standard HTML5 validation
+      if (!projectForm.checkValidity()) {
+        projectForm.reportValidity();
+        return;
+      }
+
+      // Add loading state (Assuming the CSS uses .is-loading toggle)
+      if (btnSubmit) btnSubmit.classList.add('is-loading');
+
+      const formData = new FormData(projectForm);
+
+      fetch(projectForm.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => {
+        if (btnSubmit) btnSubmit.classList.remove('is-loading');
+        if (response.ok) {
+          projectForm.style.display = 'none';
+          if (formSuccess) formSuccess.style.display = 'flex';
+        } else {
+          projectForm.style.display = 'none';
+          if (formError) formError.style.display = 'flex';
+        }
+      })
+      .catch(error => {
+        if (btnSubmit) btnSubmit.classList.remove('is-loading');
+        projectForm.style.display = 'none';
+        if (formError) formError.style.display = 'flex';
+      });
+    });
+
+    // Handle Reset buttons
+    const handleReset = () => {
+      projectForm.reset();
+      projectForm.style.display = 'block';
+      if (formSuccess) formSuccess.style.display = 'none';
+      if (formError) formError.style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const resetBtn = document.getElementById('reset-form');
+    if (resetBtn) resetBtn.addEventListener('click', handleReset);
+
+    const retryBtn = document.getElementById('retry-form');
+    if (retryBtn) retryBtn.addEventListener('click', handleReset);
   }
 
 });

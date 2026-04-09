@@ -43,16 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
       minLength: 20,
       errorId: 'goals-error',
       errorMessage: 'Please describe your project goals (at least 20 characters)'
-    },
-    'project-urgency': {
-      required: true,
-      errorId: 'urgency-error',
-      errorMessage: 'Please select a timeline'
-    },
-    'project-budget': {
-      required: true,
-      errorId: 'budget-error',
-      errorMessage: 'Please select a budget range'
     }
   };
 
@@ -88,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
       group.classList.add('has-error');
       field.classList.add('has-error');
       field.classList.remove('is-valid');
-      
+
       const errorEl = document.getElementById(rules.errorId);
       if (errorEl) {
         errorEl.textContent = errorMessage;
@@ -129,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const group = firstInvalidField.closest('.floating-group');
       group.classList.add('shake');
       setTimeout(() => group.classList.remove('shake'), 400);
-      
+
       firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
       firstInvalidField.focus();
     }
@@ -157,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
     form.classList.add('is-hidden');
     successMessage.classList.add('is-visible');
     errorMessage.classList.remove('is-visible');
-    
+
     // Scroll to top of form container
     successMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -169,12 +159,12 @@ document.addEventListener('DOMContentLoaded', () => {
     form.classList.add('is-hidden');
     errorMessage.classList.add('is-visible');
     successMessage.classList.remove('is-visible');
-    
+
     const errorMsgEl = document.getElementById('error-message');
     if (errorMsgEl && message) {
       errorMsgEl.textContent = message;
     }
-    
+
     errorMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -186,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     form.classList.remove('is-hidden');
     successMessage.classList.remove('is-visible');
     errorMessage.classList.remove('is-visible');
-    
+
     // Clear all validation states
     form.querySelectorAll('.floating-input').forEach(input => {
       input.classList.remove('has-error', 'is-valid');
@@ -194,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     form.querySelectorAll('.floating-group').forEach(group => {
       group.classList.remove('has-error');
     });
-    
+
     // Scroll to form
     form.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -204,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const field = document.getElementById(fieldId);
     if (field) {
       field.addEventListener('blur', () => validateField(field));
-      
+
       // Clear error on input
       field.addEventListener('input', () => {
         const group = field.closest('.floating-group');
@@ -231,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       // Collect form data
       const formData = new FormData(form);
-      
+
       // Submit to FormSubmit
       const response = await fetch(form.action, {
         method: 'POST',
@@ -275,10 +265,10 @@ document.addEventListener('DOMContentLoaded', () => {
   textareas.forEach(textarea => {
     const maxLength = textarea.getAttribute('maxlength');
     const hint = textarea.parentElement.querySelector('.input-hint');
-    
+
     if (hint && maxLength) {
       const originalHint = hint.textContent;
-      
+
       textarea.addEventListener('input', () => {
         const remaining = maxLength - textarea.value.length;
         if (remaining < 200) {
