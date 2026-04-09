@@ -107,63 +107,39 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 3. Cinematic Hover Drift for Portfolio Track
-  const track = document.querySelector('.portfolio-horizontal');
-  let driftAnimationId;
-  let isDrifting = false;
-  let scrollAcc = 0; // Accumulator for fractional pixels
-
-  if (track) {
-    const driftStep = () => {
-      if (!isDrifting) {
-        track.style.scrollSnapType = 'x mandatory'; 
-        return;
-      }
-      
-      scrollAcc += 0.5; // Very slow drift
-      if (scrollAcc >= 1) {
-        track.scrollLeft += Math.floor(scrollAcc);
-        scrollAcc -= Math.floor(scrollAcc);
-      }
-      
-      driftAnimationId = requestAnimationFrame(driftStep);
-    };
-
-    track.addEventListener('mouseenter', () => {
-      if (isDrifting) return;
-      isDrifting = true;
-      track.style.scrollSnapType = 'none'; 
-      scrollAcc = 0; 
-      driftAnimationId = requestAnimationFrame(driftStep);
+  // 3. Interactive Typographic List (Cursor Reveal)
+  const kineticList = document.querySelector('.portfolio-kinetic-list');
+  const cursorImg = document.getElementById('cursor-reveal-img');
+  
+  if (kineticList && cursorImg) {
+    const items = kineticList.querySelectorAll('.kinetic-item');
+    
+    // Mouse tracking over the entire list area
+    kineticList.addEventListener('mousemove', (e) => {
+      // Use clientX/Y for fixed positioning against the viewport
+      const x = e.clientX;
+      const y = e.clientY;
+      cursorImg.style.left = `${x}px`;
+      cursorImg.style.top = `${y}px`;
     });
 
-    track.addEventListener('mouseleave', () => {
-      isDrifting = false;
-      cancelAnimationFrame(driftAnimationId);
+    items.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        const imgSrc = item.getAttribute('data-image');
+        if (imgSrc) {
+          cursorImg.style.backgroundImage = `url(${imgSrc})`;
+          cursorImg.classList.add('is-active');
+        }
+      });
+
+      item.addEventListener('mouseleave', () => {
+        cursorImg.classList.remove('is-active');
+      });
     });
   }
 
-  // 4. Manual Slider Navigation
-  const btnPrev = document.querySelector('.slider-prev');
-  const btnNext = document.querySelector('.slider-next');
-
-  if (track && btnPrev && btnNext) {
-    const scrollAmount = () => {
-      const card = track.firstElementChild;
-      return card ? card.offsetWidth + 24 : 400; // card width + 1.5rem gap (24px)
-    };
-
-    btnPrev.addEventListener('click', () => {
-      track.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
-    });
-
-    btnNext.addEventListener('click', () => {
-      track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
-    });
-  }
-
-  // 5. Portfolio Lightbox Modal
-  const portfolioCards = document.querySelectorAll('.portfolio-card');
+  // 4. Portfolio Lightbox Modal (Adapted for Kinetic List)
+  const kineticItems = document.querySelectorAll('.kinetic-item');
   const modal = document.getElementById('portfolio-modal');
   const modalImg = document.getElementById('modal-img');
   const modalTitle = document.getElementById('modal-title');
@@ -178,20 +154,22 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.style.overflow = '';
     };
 
-    portfolioCards.forEach(card => {
+    kineticItems.forEach(item => {
       // Use cursor pointer to indicate clickability
-      card.style.cursor = 'pointer';
+      item.style.cursor = 'pointer';
 
-      // Pre-query elements inside the card for performance optimization
-      const img = card.querySelector('.portfolio-card-img');
-      const title = card.querySelector('.portfolio-card-title');
-      const desc = card.querySelector('.portfolio-overlay-content p');
+      // Pre-query elements inside the item
+      const imgSrc = item.getAttribute('data-image');
+      const title = item.querySelector('.kinetic-title');
+      const desc = item.querySelector('.kinetic-desc');
       
-      card.addEventListener('click', (e) => {
-        // Populate modal with pre-queried data
-        if (img) modalImg.src = img.src;
+      item.addEventListener('click', (e) => {
+        // Populate modal
+        if (imgSrc) modalImg.src = imgSrc;
         if (title) modalTitle.textContent = title.textContent;
-        if (desc) modalDesc.textContent = desc.textContent;
+        if (modalDesc) {
+          modalDesc.textContent = desc ? desc.textContent : '';
+        }
 
         // Open modal
         modal.classList.add('is-open');

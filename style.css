@@ -322,231 +322,137 @@ ul {
   color: var(--text-muted);
 }
 
-/* Slider Wrapper for Buttons */
-.portfolio-slider-wrapper {
+/* ═════════════════ PORTFOLIO KINETIC LIST (CONCEPT 2) ═══════════════ */
+.portfolio {
   position: relative;
-  width: 100%;
 }
 
-.slider-btn {
-  position: absolute;
-  top: 45%;
-  transform: translateY(-50%);
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: #fff;
-  border: 1px solid var(--border-color);
-  /* délicat outline */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  color: var(--text-main);
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-}
-
-.contact-glow-btn {
-  background-color: var(--accent-blue);
-  color: #fff;
-  border: 1px solid var(--accent-blue);
-  padding: 0.75rem 1.5rem; /* Standard button size */
-}
-
-.contact-glow-btn:hover {
-  background-color: #fff;
-  color: var(--accent-blue);
-  border-color: #fff;
-  box-shadow: 0 0 30px rgba(41, 171, 226, 0.4);
-}
-
-.slider-btn svg {
-  width: 24px;
-  height: 24px;
-}
-
-.slider-btn:hover {
-  border-color: var(--accent-blue);
-  color: var(--accent-blue);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-}
-
-.slider-prev {
-  left: -28px;
-}
-
-.slider-next {
-  right: -28px;
-}
-
-@media (max-width: 992px) {
-  .slider-btn {
-    display: none;
-    /* Hide on mobile/tablet, rely on native swipe */
-  }
-}
-
-/* Horizontal Native Scrolling Track */
-.portfolio-horizontal {
-  display: flex;
-  gap: 1.5rem;
-  width: 100%;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  padding-bottom: 2rem;
-  /* Buffer for hover effects and scrollbar if any */
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  /* Firefox */
-}
-
-.portfolio-horizontal::-webkit-scrollbar {
-  display: none;
-  /* Chrome/Safari */
-}
-
-.portfolio-card {
-  border: 1px solid var(--border-color);
-  background: #fff;
-  /* ✨ UPDATED: Added opacity and filter to the transition for smooth spotlight fading */
-  transition: transform 0.4s ease, border-color 0.4s ease, opacity 0.4s ease, filter 0.4s ease;
+.portfolio-kinetic-list {
   display: flex;
   flex-direction: column;
-  position: relative;
-  overflow: hidden;
-  flex: 0 0 calc(40% - 1.5rem);
-  /* Desktop: show 2.5 items to hint scrolling */
-  height: 550px;
-  /* Fixed concise height to prevent tall scrolling */
-  scroll-snap-align: start;
+  margin-top: 4rem;
+  padding-bottom: 6rem;
+  border-top: 1px solid var(--border-color);
 }
 
-/* Interactive Hover States */
-.portfolio-horizontal:hover .portfolio-card {
-  border-color: #eee;
-}
-
-.portfolio-horizontal .portfolio-card:hover {
-  border-color: var(--accent-blue);
-  transform: translateY(-4px);
-  z-index: 2;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-  /* Soft pop effect */
-}
-
-/* ✨ NEW: The Spotlight Effect */
-/* Wrapped in hover media query so it doesn't break touch/mobile devices */
-@media (hover: hover) {
-  .portfolio-horizontal:hover .portfolio-card:not(:hover) {
-    opacity: 0.5;
-    /* Dim the other cards */
-    filter: grayscale(80%) blur(2px);
-    /* Desaturate and blur slightly */
-    transform: scale(0.98);
-    /* Push them back slightly */
-  }
-}
-
-/* Tablet Layout */
-@media (max-width: 992px) {
-  .portfolio-card {
-    flex: 0 0 calc(60% - 1.5rem);
-    /* Hint scrolling */
-  }
-}
-
-/* Mobile Layout */
-@media (max-width: 600px) {
-  .portfolio-card {
-    flex: 0 0 calc(90% - 1.5rem);
-    /* Almost full width but snaps to edge */
-    height: 450px;
-  }
-}
-
-.portfolio-card-img-wrap {
-  flex-grow: 1;
-  /* Automatically takes all extra height */
-  position: relative;
-  width: 100%;
-  overflow: hidden;
+.kinetic-item {
+  display: grid;
+  grid-template-columns: 60px 80px 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 2.4rem 0;
   border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  position: relative;
+  z-index: 2;
 }
 
-.portfolio-card-img {
+.kinetic-thumb {
+  width: 100%;
+  height: 80px; /* Full height relative to the title size */
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--border-color);
+}
+
+.kinetic-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.8s ease;
+  display: block;
 }
 
-.portfolio-card:hover .portfolio-card-img {
-  transform: scale(1.03);
-}
-
-.portfolio-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(41, 171, 226, 0.9);
-  /* Exact Accent blue */
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  display: flex;
-  align-items: center;
-  padding: 2rem;
-}
-
-.portfolio-card:hover .portfolio-overlay {
-  opacity: 1;
-}
-
-.portfolio-overlay-content {
-  color: #fff;
-}
-
-.portfolio-overlay-content p {
-  margin-top: 1rem;
+.kinetic-year {
   font-size: 0.875rem;
-  line-height: 1.5;
+  color: var(--text-muted);
 }
 
-.portfolio-card-body {
-  padding: 1.5rem;
+.kinetic-content {
   display: flex;
   flex-direction: column;
-}
-
-.portfolio-card-tags {
-  display: flex;
   gap: 0.5rem;
-  margin-bottom: 1rem;
 }
 
-.spec-badge {
-  font-size: 0.6rem;
-  padding: 0.2rem 0.4rem;
-  border: 1px solid var(--border-color);
+.kinetic-title {
+  font-size: clamp(1.6rem, 4.8vw, 4rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  margin: 0;
+  line-height: 1;
+}
+
+.kinetic-desc {
+  display: none; /* Hidden on the list, extracted via JS for the modal */
+}
+
+.kinetic-tag {
+  font-size: 0.75rem;
   letter-spacing: 0.05em;
   color: var(--text-muted);
 }
 
-.portfolio-card-title {
-  font-size: 1.25rem;
-  font-weight: 500;
-  margin-bottom: 1rem;
+/* Hover Logistics (Camera Focus Effect) */
+.portfolio-kinetic-list:hover .kinetic-item {
+  opacity: 0.4; /* Dim all items gently */
+  filter: blur(2px) grayscale(50%); /* Push them slightly out of focus */
 }
 
-.portfolio-card-year {
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  margin-top: auto;
-  align-self: flex-start;
+.portfolio-kinetic-list .kinetic-item:hover {
+  opacity: 1 !important; /* Full opacity */
+  filter: blur(0) grayscale(0) !important; /* Bring into sharp focus */
+  transform: translateX(20px); /* Subtle slide right on hover */
+}
+
+/* Cursor Reveal Element */
+.cursor-reveal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 320px;
+  height: 400px;
+  pointer-events: none; /* Let clicks pass through to the list */
+  z-index: 1; /* Below the text list */
+  opacity: 0; /* Hidden by default */
+  transform: translate(-50%, -50%) scale(0.8); /* Center on cursor, shrink slightly */
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 1, 0.3, 1); /* Smooth opacity and scale */
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px; /* Soft corners for premium vibe */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  will-change: transform, left, top;
+}
+
+/* When image is active (class added by JS) */
+.cursor-reveal.is-active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1); /* Expand to full size */
+}
+
+/* Mobile Fallback: No cursor on mobile, so we fall back to standard text or hide the effect */
+@media (max-width: 992px) {
+  .cursor-reveal {
+    display: none !important;
+  }
+  .portfolio-kinetic-list:hover .kinetic-item {
+    opacity: 1; /* Disable dimming on mobile where hover gets stuck */
+  }
+  .portfolio-kinetic-list .kinetic-item:hover {
+    transform: none; /* Disable shift */
+  }
+  
+  .kinetic-title {
+    font-size: 2.5rem;
+  }
+  .kinetic-item {
+    padding: 1.5rem 0;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .kinetic-year {
+    order: -1; /* Move year up above title */
+  }
 }
 
 /* ═══════════════════════════ SERVICES ══════════════════════════════ */
