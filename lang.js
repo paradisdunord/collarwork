@@ -1,6 +1,6 @@
 const translations = {
   en: {
-    "meta_desc": "A graphic and video design studio based in Whitehorse, Yukon. Specializing in brand identity, sleek digital aesthetics, and professional print.",
+    "meta_desc": "A graphic and video design studio based in Whitehorse. Specializing in brand identity, sleek digital aesthetics, and professional print.",
     "nav_portfolio": "Portfolio",
     "nav_services": "Services",
     "nav_contact": "Contact",
@@ -124,7 +124,7 @@ const translations = {
     "c_form_type_8": "Website Design",
     "c_form_type_9": "Something Else",
     "c_form_label_title": "Project Title / Name <span class=\"required-star\">*</span>",
-    "c_form_err_title": "Please give your project a name",
+    "c_form_err_title": "Don't worry. Please give your project a simple name",
 
     "form_sec_3_title": "Why this project?",
     "c_form_label_goals": "What are you trying to achieve? <span class=\"required-star\">*</span>",
@@ -171,7 +171,7 @@ const translations = {
     "c_form_disclaimer": "By submitting, you agree to our <a href=\"privacy.html\">Privacy Policy</a>.",
   },
   fr: {
-    "meta_desc": "Un studio de design graphique et vidéo basé à Whitehorse, au Yukon. Spécialisé en image de marque, esthétique numérique épurée et impression professionnelle.",
+    "meta_desc": "Un studio de design graphique et vidéo basé à Whitehorse. Spécialisé en image de marque, esthétique numérique épurée et impression professionnelle.",
     "nav_portfolio": "Réalisations",
     "nav_services": "Services",
     "nav_contact": "Contact",
