@@ -36,22 +36,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (navToggle && navLinks) {
     navToggle.addEventListener('click', () => {
-      navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-      navLinks.style.flexDirection = 'column';
-      navLinks.style.position = 'absolute';
-      navLinks.style.top = '80px';
-      navLinks.style.left = '0';
-      navLinks.style.width = '100%';
-      navLinks.style.background = '#fafafa';
-      navLinks.style.padding = '2rem';
-      navLinks.style.borderBottom = '1px solid var(--border-color)';
+      navLinks.classList.toggle('is-open');
     });
 
     // Close mobile menu when a nav link is clicked
     navLinkItems.forEach(link => {
       link.addEventListener('click', () => {
         if (window.innerWidth <= 768) {
-          navLinks.removeAttribute('style');
+          navLinks.classList.remove('is-open');
         }
       });
     });
@@ -189,65 +181,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 6. Contact Form AJAX Submission
-  const projectForm = document.getElementById('project-form');
-  const btnSubmit = document.getElementById('submit-btn');
-  const formSuccess = document.getElementById('form-success');
-  const formError = document.getElementById('form-error');
-
-  if (projectForm) {
-    projectForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      // Check standard HTML5 validation
-      if (!projectForm.checkValidity()) {
-        projectForm.reportValidity();
-        return;
-      }
-
-      // Add loading state (Assuming the CSS uses .is-loading toggle)
-      if (btnSubmit) btnSubmit.classList.add('is-loading');
-
-      const formData = new FormData(projectForm);
-
-      fetch(projectForm.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
-      })
-      .then(response => {
-        if (btnSubmit) btnSubmit.classList.remove('is-loading');
-        if (response.ok) {
-          projectForm.style.display = 'none';
-          if (formSuccess) formSuccess.style.display = 'flex';
-        } else {
-          projectForm.style.display = 'none';
-          if (formError) formError.style.display = 'flex';
-        }
-      })
-      .catch(error => {
-        if (btnSubmit) btnSubmit.classList.remove('is-loading');
-        projectForm.style.display = 'none';
-        if (formError) formError.style.display = 'flex';
-      });
-    });
-
-    // Handle Reset buttons
-    const handleReset = () => {
-      projectForm.reset();
-      projectForm.style.display = 'block';
-      if (formSuccess) formSuccess.style.display = 'none';
-      if (formError) formError.style.display = 'none';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    const resetBtn = document.getElementById('reset-form');
-    if (resetBtn) resetBtn.addEventListener('click', handleReset);
-
-    const retryBtn = document.getElementById('retry-form');
-    if (retryBtn) retryBtn.addEventListener('click', handleReset);
-  }
 
 });

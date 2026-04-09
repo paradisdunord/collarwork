@@ -771,6 +771,18 @@ ul {
     display: none;
   }
 
+  .nav-links.is-open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background: #fafafa;
+    padding: 2rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
   .nav-toggle {
     display: flex;
   }
