@@ -7,6 +7,7 @@
 
   <meta http-equiv="content-language" content="en">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; form-action 'self' https://formsubmit.co; object-src 'none'; base-uri 'self';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
   <title>Collarwork Design | Creative Studio</title>
@@ -203,7 +204,7 @@
           
           <div class="kinetic-item" data-image="images/thenewguy.webp">
             <span class="kinetic-year">2026</span>
-            <div class="kinetic-thumb"><img src="images/thenewguy.webp" alt="l'Aurore boréale"></div>
+            <div class="kinetic-thumb"><img src="images/thenewguy.webp" alt="l'Aurore boréale" loading="lazy"></div>
             <div class="kinetic-content">
               <h2 class="kinetic-title">l'Aurore boréale</h2>
               <p class="kinetic-desc" data-i18n="port_01_desc">With the goal to reach a new audience during a large scale event happening in WHitehorse, <i>l'Aurore boréale</i> wa looking for a design that felt fresh and could reach a younger audience.</p>
@@ -213,7 +214,7 @@
 
           <div class="kinetic-item" data-image="images/wildup.webp">
             <span class="kinetic-year">2024</span>
-            <div class="kinetic-thumb"><img src="images/wildup.webp" alt="Wild Up"></div>
+            <div class="kinetic-thumb"><img src="images/wildup.webp" alt="Wild Up" loading="lazy"></div>
             <div class="kinetic-content">
               <h2 class="kinetic-title">Wild Up</h2>
               <p class="kinetic-desc" data-i18n="port_02_desc">This local business in the tourism industry, became Wild up, a fully established brand. We built the brand, starting with the name to every other details.</p>
@@ -223,7 +224,7 @@
 
           <div class="kinetic-item" data-image="images/mokamoka.webp">
             <span class="kinetic-year">2023</span>
-            <div class="kinetic-thumb"><img src="images/mokamoka.webp" alt="Moka Moka"></div>
+            <div class="kinetic-thumb"><img src="images/mokamoka.webp" alt="Moka Moka" loading="lazy"></div>
             <div class="kinetic-content">
               <h2 class="kinetic-title">Moka Moka</h2>
               <p class="kinetic-desc" data-i18n="port_03_desc">Handcrafted creation deserve a handcrafted design for their brand. This skilled artisan needed an image that could handle her imagination</p>
@@ -233,7 +234,7 @@
 
           <div class="kinetic-item" data-image="images/shfy.png">
             <span class="kinetic-year">2024</span>
-            <div class="kinetic-thumb"><img src="images/shfy.png" alt="Société d'histoire francophone du Yukon"></div>
+            <div class="kinetic-thumb"><img src="images/shfy.png" alt="Société d'histoire francophone du Yukon" loading="lazy"></div>
             <div class="kinetic-content">
               <h2 class="kinetic-title" data-i18n="port_04_title">Société d'histoire francophone du Yukon</h2>
               <p class="kinetic-desc" data-i18n="port_04_desc">A common collaboration with the Société d'histoire francophone du Yukon to create, edit develop their ideas and expos.</p>
@@ -243,7 +244,7 @@
 
           <div class="kinetic-item" data-image="images/blue-pc.jpg">
             <span class="kinetic-year">2024</span>
-            <div class="kinetic-thumb"><img src="images/blue-pc.jpg" alt="Project Epsilon"></div>
+            <div class="kinetic-thumb"><img src="images/blue-pc.jpg" alt="Project Epsilon" loading="lazy"></div>
             <div class="kinetic-content">
               <h2 class="kinetic-title" data-i18n="port_05_title">Project Epsilon</h2>
               <p class="kinetic-desc" data-i18n="port_05_desc">Currently in development. Coming soon.</p>
@@ -350,11 +351,7 @@
           </div>
 
           <a href="contact.html" class="btn contact-glow-btn">
-            <span data-i18n="contact_promo_btn">Open Intake Form</span>
-            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="square">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
+            <span data-i18n="nav_cta">Start a Project</span>
           </a>
         </div>
       </div>
@@ -440,8 +437,8 @@
     </div>
   </div>
 
-  <script src="lang.js"></script>
-  <script src="main.js"></script>
+  <script src="lang.js" defer></script>
+  <script src="main.js" defer></script>
 </body>
 
 </html>

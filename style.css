@@ -42,6 +42,7 @@ a {
   text-decoration: none;
   color: inherit;
   transition: color 0.3s ease;
+  touch-action: manipulation;
 }
 
 ul {
@@ -60,6 +61,7 @@ ul {
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   font-size: 0.875rem;
@@ -68,6 +70,8 @@ ul {
   border: 1px solid var(--text-main);
   transition: all 0.3s ease;
   cursor: pointer;
+  min-height: 44px;
+  touch-action: manipulation;
 }
 
 .btn-primary {
@@ -554,6 +558,20 @@ ul {
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 2rem;
   max-width: 400px;
+}
+
+.contact-glow-btn {
+  background-color: var(--accent-blue);
+  color: #fff;
+  border-color: var(--accent-blue);
+  font-weight: 600;
+}
+
+.contact-glow-btn:hover {
+  background-color: #fff;
+  color: var(--accent-blue);
+  border-color: #fff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
 }
 
 .contact-info {
