@@ -346,7 +346,10 @@ const translations = {
 
 document.addEventListener('DOMContentLoaded', () => {
   // Determine language, default to 'en'
-  let currentLang = localStorage.getItem('collarwork_lang') || 'en';
+  // Validate against safelist to prevent Object Prototype Pollution / XSS
+  const validLangs = ['en', 'fr'];
+  let storedLang = localStorage.getItem('collarwork_lang');
+  let currentLang = validLangs.includes(storedLang) ? storedLang : 'en';
   setLanguage(currentLang);
 
   // Setup toggle button
