@@ -501,7 +501,26 @@ ul {
 
 .service-tags {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.spec-badge {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  border-radius: 50px;
+  border: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.service-item:hover .spec-badge {
+  border-color: var(--text-main);
+  color: var(--text-main);
 }
 
 .service-arrow {
