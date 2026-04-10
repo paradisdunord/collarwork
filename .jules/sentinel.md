@@ -11,3 +11,7 @@
 **Vulnerability:** Plaintext email address was exposed in the form action attribute for formsubmit.co.
 **Learning:** The plaintext email could be easily scraped by bots leading to spam.
 **Prevention:** Use a random 32-character hexadecimal string provided by formsubmit.co instead of a plaintext email address.
+## 2026-04-10 - LocalStorage Untrusted Input
+**Vulnerability:** The `collarwork_lang` value retrieved from `localStorage` was used without validation as an object key to read `translations` and injected into the DOM via `innerHTML`.
+**Learning:** Values from `localStorage` can be manipulated by malicious scripts or users. Failing to validate them can lead to Object Prototype Pollution or XSS vulnerabilities, especially when used to construct DOM elements.
+**Prevention:** Always validate values retrieved from `localStorage` against a safelist (e.g., `['en', 'fr']`) before using them in sensitive operations like object property access or DOM manipulation.
