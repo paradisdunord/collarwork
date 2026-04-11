@@ -254,7 +254,8 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error('Form submission failed');
       }
     } catch (error) {
-      console.error('Form submission error:', error);
+      // Intentionally not logging the error object to prevent exposing internal
+      // stack traces or detailed network error responses to the public console.
       showError('There was an error sending your message. Please try again or email us directly at hello@collarworkdesign.com');
     } finally {
       setLoading(false);

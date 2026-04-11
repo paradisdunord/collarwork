@@ -15,3 +15,7 @@
 **Vulnerability:** The `collarwork_lang` value retrieved from `localStorage` was used without validation as an object key to read `translations` and injected into the DOM via `innerHTML`.
 **Learning:** Values from `localStorage` can be manipulated by malicious scripts or users. Failing to validate them can lead to Object Prototype Pollution or XSS vulnerabilities, especially when used to construct DOM elements.
 **Prevention:** Always validate values retrieved from `localStorage` against a safelist (e.g., `['en', 'fr']`) before using them in sensitive operations like object property access or DOM manipulation.
+## 2026-04-11 - Leaking Debug Logs
+**Vulnerability:** A `console.error` statement was left in the production code catching form submission errors.
+**Learning:** `console.error` logs can inadvertently expose internal application flow, stack traces, and detailed network error responses to end users checking the console.
+**Prevention:** Remove all console statements in production code. Catch errors and show user-facing messages via UI only.
