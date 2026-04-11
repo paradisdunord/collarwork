@@ -363,14 +363,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+let cachedElements = null;
+let cachedPlaceholders = null;
+let cachedMetaDesc = null;
+let cachedOgDesc = null;
+let cachedTwitterDesc = null;
+let isMetaCached = false;
+
 function setLanguage(lang) {
   // Store preference
   localStorage.setItem('collarwork_lang', lang);
   document.documentElement.lang = lang === 'en' ? 'en' : 'fr-CA';
 
   // Translate all elements with data-i18n
-  const elements = document.querySelectorAll('[data-i18n]');
-  elements.forEach(el => {
+  if (!cachedElements) {
+    cachedElements = document.querySelectorAll('[data-i18n]');
+  }
+  cachedElements.forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (translations[lang] && translations[lang][key]) {
       // Use innerHTML because some translations contain `<br>` or `<i>` tags
@@ -379,8 +388,10 @@ function setLanguage(lang) {
   });
 
   // Translate all elements with data-i18n-placeholder
-  const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
-  placeholders.forEach(el => {
+  if (!cachedPlaceholders) {
+    cachedPlaceholders = document.querySelectorAll('[data-i18n-placeholder]');
+  }
+  cachedPlaceholders.forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
     if (translations[lang] && translations[lang][key]) {
       el.placeholder = translations[lang][key];
@@ -388,13 +399,16 @@ function setLanguage(lang) {
   });
 
   // Translate Meta Description
-  const metaDesc = document.querySelector('meta[name="description"]');
-  const ogDesc = document.querySelector('meta[property="og:description"]');
-  const twitterDesc = document.querySelector('meta[property="twitter:description"]');
-  if (metaDesc && translations[lang]["meta_desc"]) {
-    metaDesc.content = translations[lang]["meta_desc"];
-    if (ogDesc) ogDesc.content = translations[lang]["meta_desc"];
-    if (twitterDesc) twitterDesc.content = translations[lang]["meta_desc"];
+  if (!isMetaCached) {
+    cachedMetaDesc = document.querySelector('meta[name="description"]');
+    cachedOgDesc = document.querySelector('meta[property="og:description"]');
+    cachedTwitterDesc = document.querySelector('meta[property="twitter:description"]');
+    isMetaCached = true;
+  }
+
+  if (cachedMetaDesc && translations[lang]["meta_desc"]) {
+    cachedMetaDesc.content = translations[lang]["meta_desc"];
+    if (cachedOgDesc) cachedOgDesc.content = translations[lang]["meta_desc"];
+    if (cachedTwitterDesc) cachedTwitterDesc.content = translations[lang]["meta_desc"];
   }
 }
-
