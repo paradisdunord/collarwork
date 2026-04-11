@@ -15,3 +15,7 @@
 **Vulnerability:** The `collarwork_lang` value retrieved from `localStorage` was used without validation as an object key to read `translations` and injected into the DOM via `innerHTML`.
 **Learning:** Values from `localStorage` can be manipulated by malicious scripts or users. Failing to validate them can lead to Object Prototype Pollution or XSS vulnerabilities, especially when used to construct DOM elements.
 **Prevention:** Always validate values retrieved from `localStorage` against a safelist (e.g., `['en', 'fr']`) before using them in sensitive operations like object property access or DOM manipulation.
+## 2024-06-25 - XSS Vulnerability in innerHTML
+**Vulnerability:** Cross-Site Scripting (XSS) was possible via un-sanitized content being injected directly into the DOM using `innerHTML` from the `translations` object in `lang.js`.
+**Learning:** `innerHTML` is inherently unsafe when handling data that may contain malicious scripts, even if the primary source is considered safe, as it could be manipulated (e.g. via prototype pollution or unauthorized edits).
+**Prevention:** Always sanitize any input that will be inserted as HTML. Use DOM-based sanitizers (like a custom `setSafeHTML` function or libraries like DOMPurify) to parse the HTML, strip out dangerous tags (`<script>`, `<style>`, `<iframe>`, etc.) and risky attributes (`href` starting with `javascript:`), while retaining only safe, expected tags (e.g. `<br>`, `<i>`).

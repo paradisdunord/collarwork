@@ -363,6 +363,50 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+
+function setSafeHTML(element, html) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const allowedTags = ['BR', 'I', 'EM', 'A', 'SPAN'];
+  const allowedAttributes = ['href', 'target', 'rel', 'class'];
+
+  const cleanNode = (node) => {
+    const children = Array.from(node.childNodes);
+    children.forEach(cleanNode);
+
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      if (node.tagName === 'SCRIPT' || node.tagName === 'STYLE' || node.tagName === 'IFRAME' || node.tagName === 'OBJECT') {
+          node.parentNode.removeChild(node);
+      } else if (!allowedTags.includes(node.tagName)) {
+        const fragment = document.createDocumentFragment();
+        while (node.firstChild) {
+          fragment.appendChild(node.firstChild);
+        }
+        node.parentNode.replaceChild(fragment, node);
+      } else {
+        Array.from(node.attributes).forEach(attr => {
+          if (!allowedAttributes.includes(attr.name)) {
+            node.removeAttribute(attr.name);
+          } else if (attr.name === 'href') {
+            const url = attr.value.trim().toLowerCase();
+            if (url.startsWith('javascript:') || url.startsWith('data:') || url.startsWith('vbscript:')) {
+              node.removeAttribute('href');
+            }
+          }
+        });
+      }
+    } else if (node.nodeType !== Node.TEXT_NODE) {
+      node.parentNode.removeChild(node);
+    }
+  };
+
+  Array.from(doc.body.childNodes).forEach(cleanNode);
+
+  element.innerHTML = '';
+  while (doc.body.firstChild) {
+    element.appendChild(doc.body.firstChild);
+  }
+}
+
 function setLanguage(lang) {
   // Store preference
   localStorage.setItem('collarwork_lang', lang);
@@ -374,7 +418,7 @@ function setLanguage(lang) {
     const key = el.getAttribute('data-i18n');
     if (translations[lang] && translations[lang][key]) {
       // Use innerHTML because some translations contain `<br>` or `<i>` tags
-      el.innerHTML = translations[lang][key];
+      setSafeHTML(el, translations[lang][key]);
     }
   });
 
