@@ -46,6 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Cache validation fields to avoid repeated DOM queries
+  const validationFields = Object.keys(validationRules)
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+
   /**
    * Validate a single field
    */
@@ -101,16 +106,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let isValid = true;
     let firstInvalidField = null;
 
-    Object.keys(validationRules).forEach(fieldId => {
-      const field = document.getElementById(fieldId);
-      if (field) {
-        const fieldValid = validateField(field);
-        if (!fieldValid && !firstInvalidField) {
-          firstInvalidField = field;
-        }
-        if (!fieldValid) {
-          isValid = false;
-        }
+    validationFields.forEach(field => {
+      const fieldValid = validateField(field);
+      if (!fieldValid && !firstInvalidField) {
+        firstInvalidField = field;
+      }
+      if (!fieldValid) {
+        isValid = false;
       }
     });
 
@@ -190,20 +192,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Real-time validation on blur
-  Object.keys(validationRules).forEach(fieldId => {
-    const field = document.getElementById(fieldId);
-    if (field) {
-      field.addEventListener('blur', () => validateField(field));
+  validationFields.forEach(field => {
+    field.addEventListener('blur', () => validateField(field));
 
-      // Clear error on input
-      field.addEventListener('input', () => {
-        const group = field.closest('.floating-group');
-        if (group.classList.contains('has-error')) {
-          group.classList.remove('has-error');
-          field.classList.remove('has-error');
-        }
-      });
-    }
+    // Clear error on input
+    field.addEventListener('input', () => {
+      const group = field.closest('.floating-group');
+      if (group.classList.contains('has-error')) {
+        group.classList.remove('has-error');
+        field.classList.remove('has-error');
+      }
+    });
   });
 
   // Form submission
