@@ -279,4 +279,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
+  // Expose internals for testing
+  window.__contactFormInternals = {
+    validateField,
+    validationRules
+  };
 });
