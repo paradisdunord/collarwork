@@ -15,3 +15,8 @@
 **Vulnerability:** The `collarwork_lang` value retrieved from `localStorage` was used without validation as an object key to read `translations` and injected into the DOM via `innerHTML`.
 **Learning:** Values from `localStorage` can be manipulated by malicious scripts or users. Failing to validate them can lead to Object Prototype Pollution or XSS vulnerabilities, especially when used to construct DOM elements.
 **Prevention:** Always validate values retrieved from `localStorage` against a safelist (e.g., `['en', 'fr']`) before using them in sensitive operations like object property access or DOM manipulation.
+
+## 2025-04-10 - Unit Testing Vanilla JS with JSDOM
+**Vulnerability:** Difficulty unit testing legacy vanilla JavaScript files that execute global event listeners on load and rely heavily on the DOM, often leading developers to write brittle, overarching End-to-End browser tests (e.g. Playwright) for simple unit testing logic.
+**Learning:** For frontend logic wrapped inside specific functions in legacy files (like `setLanguage` in `lang.js`), extracting the specific function using Regex and `eval`-ing it in a Node environment configured with `jsdom` provides a fast, isolated, and highly reliable unit testing approach without triggering unrelated document load errors.
+**Prevention:** Default to `jsdom` (via Bun or Node) for testing simple DOM manipulation functions rather than standing up an entire headless browser instance, creating mocked minimal HTML structures to assert against.
