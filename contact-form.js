@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!rules) return true;
 
     const value = field.value.trim();
-    const group = field.closest('.floating-group');
+    const group = cachedGroups[field.id] || field.closest('.floating-group');
     let isValid = true;
     let errorMessage = rules.errorMessage;
 
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
       field.classList.add('has-error');
       field.classList.remove('is-valid');
 
-      const errorEl = document.getElementById(rules.errorId);
+      const errorEl = cachedErrorEls[field.id] || document.getElementById(rules.errorId);
       if (errorEl) {
         errorEl.textContent = errorMessage;
       }
@@ -94,6 +94,23 @@ document.addEventListener('DOMContentLoaded', () => {
     return isValid;
   }
 
+  // Cache DOM elements
+  const cachedFields = {};
+  const cachedErrorEls = {};
+  const cachedGroups = {};
+
+  Object.keys(validationRules).forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field) {
+      cachedFields[fieldId] = field;
+      cachedGroups[fieldId] = field.closest('.floating-group');
+      const errorEl = document.getElementById(validationRules[fieldId].errorId);
+      if (errorEl) {
+        cachedErrorEls[fieldId] = errorEl;
+      }
+    }
+  });
+
   /**
    * Validate all required fields
    */
@@ -102,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let firstInvalidField = null;
 
     Object.keys(validationRules).forEach(fieldId => {
-      const field = document.getElementById(fieldId);
+      const field = cachedFields[fieldId];
       if (field) {
         const fieldValid = validateField(field);
         if (!fieldValid && !firstInvalidField) {
