@@ -235,6 +235,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set loading state
     setLoading(true);
 
+    // 🛡️ Sentinel: Add timeout to external API calls to prevent UI hanging
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
     try {
       // Collect form data
       const formData = new FormData(form);
@@ -245,7 +249,8 @@ document.addEventListener('DOMContentLoaded', () => {
         body: formData,
         headers: {
           'Accept': 'application/json'
-        }
+        },
+        signal: controller.signal
       });
 
       if (response.ok) {
@@ -257,6 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Form submission error:', error);
       showError('There was an error sending your message. Please try again or email us directly at hello@collarworkdesign.com');
     } finally {
+      clearTimeout(timeoutId);
       setLoading(false);
     }
   });
