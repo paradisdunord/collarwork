@@ -254,7 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error('Form submission failed');
       }
     } catch (error) {
-      console.error('Form submission error:', error);
       showError('There was an error sending your message. Please try again or email us directly at hello@collarworkdesign.com');
     } finally {
       setLoading(false);
