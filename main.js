@@ -150,12 +150,12 @@ document.addEventListener('DOMContentLoaded', () => {
       // Use cursor pointer to indicate clickability
       item.style.cursor = 'pointer';
 
-      // Pre-query elements inside the item
-      const imgSrc = item.getAttribute('data-image');
-      const title = item.querySelector('.kinetic-title');
-      const desc = item.querySelector('.kinetic-desc');
-      
       item.addEventListener('click', (e) => {
+        // Defer DOM queries until click
+        const imgSrc = item.getAttribute('data-image');
+        const title = item.querySelector('.kinetic-title');
+        const desc = item.querySelector('.kinetic-desc');
+
         // Populate modal
         if (imgSrc) modalImg.src = imgSrc;
         if (title) modalTitle.textContent = title.textContent;
