@@ -14,38 +14,47 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!form) return;
 
   // Validation rules for required fields
-  const validationRules = {
-    'client-name': {
-      required: true,
-      minLength: 2,
-      errorId: 'name-error',
-      errorMessage: 'Please enter your name (at least 2 characters)'
-    },
-    'client-email': {
-      required: true,
-      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      errorId: 'email-error',
-      errorMessage: 'Please enter a valid email address'
-    },
-    'project-type': {
-      required: true,
-      errorId: 'type-error',
-      errorMessage: 'Please select a project type'
-    },
-    'project-title': {
-      required: true,
-      minLength: 3,
-      errorId: 'title-error',
-      errorMessage: 'Please give your project a name'
-    },
-    'project-goals': {
-      required: true,
-      minLength: 20,
-      errorId: 'goals-error',
-      errorMessage: 'Please describe your project goals (at least 20 characters)'
-    }
-  };
-
+const validationRules = {
+  'client-name': {
+    required: true,
+    minLength: 2,
+    errorId: 'name-error',
+    errorMessage: 'Please enter your name (at least 2 characters)'
+  },
+  'client-email': {
+    required: true,
+    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    errorId: 'email-error',
+    errorMessage: 'Please enter a valid email address'
+  },
+  'project-type': {
+    required: true,
+    errorId: 'type-error',
+    errorMessage: 'Please select a project type'
+  },
+  'project-title': {
+    required: true,
+    minLength: 3,
+    errorId: 'title-error',
+    errorMessage: 'Please give your project a name'
+  },
+  'project-goals': {
+    required: true,
+    minLength: 20,
+    errorId: 'goals-error',
+    errorMessage: 'Please describe your project goals (at least 20 characters)'
+  },
+  'project-urgency': {  // ADD THIS
+    required: true,
+    errorId: 'urgency-error',
+    errorMessage: 'Please select a timeline'
+  },
+  'project-budget': {   // ADD THIS
+    required: true,
+    errorId: 'budget-error',
+    errorMessage: 'Please select a budget range'
+  }
+};
   /**
    * Validate a single field
    */
