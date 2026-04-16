@@ -15,3 +15,8 @@
 **Vulnerability:** The `collarwork_lang` value retrieved from `localStorage` was used without validation as an object key to read `translations` and injected into the DOM via `innerHTML`.
 **Learning:** Values from `localStorage` can be manipulated by malicious scripts or users. Failing to validate them can lead to Object Prototype Pollution or XSS vulnerabilities, especially when used to construct DOM elements.
 **Prevention:** Always validate values retrieved from `localStorage` against a safelist (e.g., `['en', 'fr']`) before using them in sensitive operations like object property access or DOM manipulation.
+
+## 2026-04-16 - Prevent UI Hanging on External API Failure
+**Vulnerability:** The application was not implementing a timeout for an external API call (`fetch` to the form submission endpoint). This can result in the UI hanging indefinitely, creating a Denial of Service (DoS) risk if the endpoint takes too long or fails to respond.
+**Learning:** For application resilience and DoS risk mitigation, external API calls must be limited by a proper timeout mechanism.
+**Prevention:** Always implement an `AbortController` and `setTimeout` (cleared appropriately in `finally`) for `fetch` requests to prevent indefinite waiting.

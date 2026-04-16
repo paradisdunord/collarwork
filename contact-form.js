@@ -235,6 +235,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set loading state
     setLoading(true);
 
+    // SECURITY: Add a timeout using AbortController to prevent the UI from hanging
+    // indefinitely in case the FormSubmit API takes too long or fails to respond,
+    // which could otherwise be leveraged for a Denial of Service (DoS) attack.
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+
     try {
       // Collect form data
       const formData = new FormData(form);
@@ -245,7 +251,8 @@ document.addEventListener('DOMContentLoaded', () => {
         body: formData,
         headers: {
           'Accept': 'application/json'
-        }
+        },
+        signal: controller.signal
       });
 
       if (response.ok) {
@@ -255,8 +262,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (error) {
       console.error('Form submission error:', error);
-      showError('There was an error sending your message. Please try again or email us directly at hello@collarworkdesign.com');
+      if (error.name === 'AbortError') {
+        showError('The request timed out. Please check your internet connection and try again.');
+      } else {
+        showError('There was an error sending your message. Please try again or email us directly at hello@collarworkdesign.com');
+      }
     } finally {
+      clearTimeout(timeoutId);
       setLoading(false);
     }
   });
