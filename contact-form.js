@@ -262,13 +262,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Reset button handlers
-  if (resetBtn) {
-    resetBtn.addEventListener('click', resetForm);
-  }
-
-  if (retryBtn) {
-    retryBtn.addEventListener('click', resetForm);
-  }
+  [resetBtn, retryBtn].forEach(btn => {
+    if (btn) {
+      btn.addEventListener('click', resetForm);
+    }
+  });
 
   // Enhance date input - set min date to today
   const deadlineInput = document.getElementById('project-deadline');
