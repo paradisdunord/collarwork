@@ -9,3 +9,6 @@ Thumbs.db
 .idea/
 .jules/
 *.log
+test-results/
+playwright-report/
+node_modules/
