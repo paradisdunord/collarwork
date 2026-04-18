@@ -6,7 +6,7 @@ test.describe('Contact Form', () => {
     await page.goto('http://127.0.0.1:3000/contact.html');
 
     // Route the form submission to mock a failed response
-    await page.route('https://formsubmit.co/*', async route => {
+    await page.route('https://mailer.collarworkdesign.workers.dev*', async route => {
       await route.fulfill({
         status: 500,
         contentType: 'application/json',
@@ -20,6 +20,10 @@ test.describe('Contact Form', () => {
     await page.selectOption('#project-type', 'web_design');
     await page.fill('#project-title', 'Test Project');
     await page.fill('#project-goals', 'These are the project goals which must be at least 20 characters long.');
+
+    await page.selectOption('#project-urgency', '1_month');
+    await page.selectOption('#project-budget', '5000-10000');
+
 
     // Submit the form
     await page.click('#submit-btn');
