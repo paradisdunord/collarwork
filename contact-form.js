@@ -3,17 +3,7 @@
  * Handles validation, submission, loading states, and feedback
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('project-form');
-  const submitBtn = document.getElementById('submit-btn');
-  const successMessage = document.getElementById('form-success');
-  const errorMessage = document.getElementById('form-error');
-  const resetBtn = document.getElementById('reset-form');
-  const retryBtn = document.getElementById('retry-form');
-
-  if (!form) return;
-
-  // Validation rules for required fields
+// Validation rules for required fields
 const validationRules = {
   'client-name': {
     required: true,
@@ -44,51 +34,53 @@ const validationRules = {
     errorId: 'goals-error',
     errorMessage: 'Please describe your project goals (at least 20 characters)'
   },
-  'project-urgency': {  // ADD THIS
+  'project-urgency': {
     required: true,
     errorId: 'urgency-error',
     errorMessage: 'Please select a timeline'
   },
-  'project-budget': {   // ADD THIS
+  'project-budget': {
     required: true,
     errorId: 'budget-error',
     errorMessage: 'Please select a budget range'
   }
 };
-  /**
-   * Validate a single field
-   */
-  function validateField(field) {
-    const rules = validationRules[field.id];
-    if (!rules) return true;
 
-    const value = field.value.trim();
-    const group = cachedGroups[field.id] || field.closest('.floating-group');
-    let isValid = true;
-    let errorMessage = rules.errorMessage;
+/**
+ * Validate a single field
+ */
+function validateField(field, cachedGroups = {}, cachedErrorEls = {}) {
+  const rules = validationRules[field.id];
+  if (!rules) return true;
 
-    // Check required
-    if (rules.required && !value) {
-      isValid = false;
-    }
+  const value = field.value ? field.value.trim() : '';
+  const group = cachedGroups[field.id] || (field.closest && field.closest('.floating-group'));
+  let isValid = true;
+  let errorMessage = rules.errorMessage;
 
-    // Check minimum length
-    if (isValid && rules.minLength && value.length < rules.minLength) {
-      isValid = false;
-    }
+  // Check required
+  if (rules.required && !value) {
+    isValid = false;
+  }
 
-    // Check pattern (email)
-    if (isValid && rules.pattern && !rules.pattern.test(value)) {
-      isValid = false;
-    }
+  // Check minimum length
+  if (isValid && rules.minLength && value.length < rules.minLength) {
+    isValid = false;
+  }
 
-    // Update UI
+  // Check pattern (email)
+  if (isValid && rules.pattern && !rules.pattern.test(value)) {
+    isValid = false;
+  }
+
+  // Update UI
+  if (group && field) {
     if (!isValid) {
       group.classList.add('has-error');
       field.classList.add('has-error');
       field.classList.remove('is-valid');
 
-      const errorEl = cachedErrorEls[field.id] || document.getElementById(rules.errorId);
+      const errorEl = cachedErrorEls[field.id] || (typeof document !== 'undefined' && document.getElementById(rules.errorId));
       if (errorEl) {
         errorEl.textContent = errorMessage;
       }
@@ -99,9 +91,25 @@ const validationRules = {
         field.classList.add('is-valid');
       }
     }
-
-    return isValid;
   }
+
+  return isValid;
+}
+
+// Expose for testing
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { validationRules, validateField };
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('project-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const successMessage = document.getElementById('form-success');
+  const errorMessage = document.getElementById('form-error');
+  const resetBtn = document.getElementById('reset-form');
+  const retryBtn = document.getElementById('retry-form');
+
+  if (!form) return;
 
   // Cache DOM elements
   const cachedFields = {};
@@ -130,7 +138,7 @@ const validationRules = {
     Object.keys(validationRules).forEach(fieldId => {
       const field = cachedFields[fieldId];
       if (field) {
-        const fieldValid = validateField(field);
+        const fieldValid = validateField(field, cachedGroups, cachedErrorEls);
         if (!fieldValid && !firstInvalidField) {
           firstInvalidField = field;
         }
@@ -219,7 +227,7 @@ const validationRules = {
   Object.keys(validationRules).forEach(fieldId => {
     const field = document.getElementById(fieldId);
     if (field) {
-      field.addEventListener('blur', () => validateField(field));
+      field.addEventListener('blur', () => validateField(field, cachedGroups, cachedErrorEls));
 
       // Clear error on input
       field.addEventListener('input', () => {

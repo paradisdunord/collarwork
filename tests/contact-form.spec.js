@@ -36,4 +36,58 @@ test.describe('Contact Form', () => {
     const errorText = page.locator('#error-message');
     await expect(errorText).toContainText('error sending your message');
   });
+
+  test('validates required fields on submit', async ({ page }) => {
+    await page.goto('http://127.0.0.1:3000/contact.html');
+
+    // Click submit without filling anything
+    await page.click('#submit-btn');
+
+    // Check for error class on a required field group
+    const nameGroup = page.locator('.floating-group').filter({ hasText: 'Full Name' });
+    await expect(nameGroup).toHaveClass(/has-error/);
+
+    const emailGroup = page.locator('.floating-group').filter({ hasText: 'Email Address' });
+    await expect(emailGroup).toHaveClass(/has-error/);
+
+    const errorMsg = page.locator('#name-error');
+    await expect(errorMsg).toBeVisible();
+  });
+
+  test('validates email format', async ({ page }) => {
+    await page.goto('http://127.0.0.1:3000/contact.html');
+
+    await page.fill('#client-email', 'invalid-email');
+    await page.focus('#client-name'); // Trigger blur on email
+
+    const emailGroup = page.locator('.floating-group').filter({ hasText: 'Email Address' });
+    await expect(emailGroup).toHaveClass(/has-error/);
+
+    const errorMsg = page.locator('#email-error');
+    await expect(errorMsg).toContainText('valid email address');
+  });
+
+  test('validates minimum length for project goals', async ({ page }) => {
+    await page.goto('http://127.0.0.1:3000/contact.html');
+
+    await page.fill('#project-goals', 'Too short');
+    await page.click('#submit-btn');
+
+    const goalsGroup = page.locator('.floating-group').filter({ hasText: 'What are you trying to achieve?' });
+    await expect(goalsGroup).toHaveClass(/has-error/);
+
+    const errorMsg = page.locator('#goals-error');
+    await expect(errorMsg).toContainText('at least 20 characters');
+  });
+
+  test('clears error on input', async ({ page }) => {
+    await page.goto('http://127.0.0.1:3000/contact.html');
+
+    await page.click('#submit-btn');
+    const nameGroup = page.locator('.floating-group').filter({ hasText: 'Full Name' });
+    await expect(nameGroup).toHaveClass(/has-error/);
+
+    await page.fill('#client-name', 'J');
+    await expect(nameGroup).not.toHaveClass(/has-error/);
+  });
 });
