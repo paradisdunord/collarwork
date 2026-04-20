@@ -27,9 +27,10 @@ if (window.top !== window.self) {
   window.top.location = window.self.location;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-
-  // 1. Mobile Navigation Toggle
+/**
+ * 1. Mobile Navigation Toggle
+ */
+function initMobileNav() {
   const navToggle = document.getElementById('nav-toggle');
   const navLinks = document.getElementById('nav-links');
   const navLinkItems = document.querySelectorAll('.nav-link');
@@ -48,8 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+}
 
-  // 2. Hyper-Fast Scroll to Top with Elastic Bump (Logo click)
+/**
+ * 2. Hyper-Fast Scroll to Top with Elastic Bump (Logo click)
+ */
+function initScrollToTop() {
   const navLogos = document.querySelectorAll('.nav-logo');
 
   navLogos.forEach(logo => {
@@ -98,8 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(step);
     });
   });
+}
 
-  // 3. Interactive Typographic List (Cursor Reveal)
+/**
+ * 3. Interactive Typographic List (Cursor Reveal)
+ */
+function initCursorReveal() {
   const kineticList = document.querySelector('.portfolio-kinetic-list');
   const cursorImg = document.getElementById('cursor-reveal-img');
   
@@ -129,8 +138,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+}
 
-  // 4. Portfolio Lightbox Modal (Adapted for Kinetic List)
+/**
+ * 4. Portfolio Lightbox Modal (Adapted for Kinetic List)
+ */
+function initPortfolioLightbox() {
   const kineticItems = document.querySelectorAll('.kinetic-item');
   const modal = document.getElementById('portfolio-modal');
   const modalImg = document.getElementById('modal-img');
@@ -180,6 +193,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+}
 
-
+document.addEventListener('DOMContentLoaded', () => {
+  initMobileNav();
+  initScrollToTop();
+  initCursorReveal();
+  initPortfolioLightbox();
 });
