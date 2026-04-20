@@ -223,8 +223,8 @@ const validationRules = {
 
       // Clear error on input
       field.addEventListener('input', () => {
-        const group = field.closest('.floating-group');
-        if (group.classList.contains('has-error')) {
+        const group = cachedGroups[fieldId];
+        if (group && group.classList.contains('has-error')) {
           group.classList.remove('has-error');
           field.classList.remove('has-error');
         }
