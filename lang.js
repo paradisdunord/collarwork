@@ -370,6 +370,56 @@ let cachedOgDesc = null;
 let cachedTwitterDesc = null;
 let isMetaCached = false;
 
+/**
+ * Securely sanitizes a translation string and returns a DocumentFragment
+ * Whitelists: br, em, i, span, a tags and class, href, target, rel attributes
+ */
+function sanitizeToFragment(html) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const allowedTags = ['BR', 'EM', 'I', 'SPAN', 'A'];
+  const allowedAttrs = ['class', 'href', 'target', 'rel'];
+
+  const sanitize = (node) => {
+    if (node.nodeType === 3) { // Text node
+      return document.createTextNode(node.textContent);
+    }
+    if (node.nodeType === 1 && allowedTags.includes(node.tagName)) { // Element node
+      const el = document.createElement(node.tagName);
+      for (let i = 0; i < node.attributes.length; i++) {
+        const attr = node.attributes[i];
+        if (allowedAttrs.includes(attr.name)) {
+          let val = attr.value;
+          if (attr.name === 'href') {
+            const lowVal = val.toLowerCase().trim();
+            if (lowVal.startsWith('javascript:') || lowVal.startsWith('data:')) {
+              val = '#';
+            }
+          }
+          el.setAttribute(attr.name, val);
+        }
+      }
+      for (let i = 0; i < node.childNodes.length; i++) {
+        el.appendChild(sanitize(node.childNodes[i]));
+      }
+      return el;
+    }
+    // For non-allowed tags, strip tag and keep children
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < node.childNodes.length; i++) {
+      fragment.appendChild(sanitize(node.childNodes[i]));
+    }
+    return fragment;
+  };
+
+  const resultFragment = document.createDocumentFragment();
+  const children = Array.from(doc.body.childNodes);
+  children.forEach(child => {
+    resultFragment.appendChild(sanitize(child));
+  });
+  return resultFragment;
+}
+
 function setLanguage(lang) {
   // Store preference
   localStorage.setItem('collarwork_lang', lang);
@@ -381,9 +431,12 @@ function setLanguage(lang) {
   }
   cachedElements.forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (translations[lang] && translations[lang][key]) {
-      // Use innerHTML because some translations contain `<br>` or `<i>` tags
-      el.innerHTML = translations[lang][key];
+    // Use hasOwnProperty to prevent Prototype Pollution
+    if (translations[lang] && Object.prototype.hasOwnProperty.call(translations[lang], key)) {
+      const translation = translations[lang][key];
+      // Securely sanitize and inject HTML instead of using raw innerHTML
+      el.innerHTML = '';
+      el.appendChild(sanitizeToFragment(translation));
     }
   });
 
@@ -393,7 +446,8 @@ function setLanguage(lang) {
   }
   cachedPlaceholders.forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
-    if (translations[lang] && translations[lang][key]) {
+    // Use hasOwnProperty to prevent Prototype Pollution
+    if (translations[lang] && Object.prototype.hasOwnProperty.call(translations[lang], key)) {
       el.placeholder = translations[lang][key];
     }
   });
@@ -406,7 +460,7 @@ function setLanguage(lang) {
     isMetaCached = true;
   }
 
-  if (cachedMetaDesc && translations[lang]["meta_desc"]) {
+  if (cachedMetaDesc && translations[lang] && Object.prototype.hasOwnProperty.call(translations[lang], "meta_desc")) {
     cachedMetaDesc.content = translations[lang]["meta_desc"];
     if (cachedOgDesc) cachedOgDesc.content = translations[lang]["meta_desc"];
     if (cachedTwitterDesc) cachedTwitterDesc.content = translations[lang]["meta_desc"];
