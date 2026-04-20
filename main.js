@@ -1,10 +1,3 @@
-// Anti-Clickjacking: Frame-busting script
-// Required because GitHub Pages doesn't allow X-Frame-Options headers
-// and CSP <meta> tags don't support the frame-ancestors directive.
-if (window.top !== window.self) {
-  window.top.location = window.self.location;
-}
-
 document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Mobile Navigation Toggle
@@ -35,16 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Removed cheesy scroll-reveal effects. Collarwork is rugged and static.
+
   // 2. Hyper-Fast Scroll to Top with Elastic Bump (Logo click)
   const navLogos = document.querySelectorAll('.nav-logo');
-
-  // Custom Elastic Ease Out Back
-  const easeOutBackC1 = 3.0; // High overshoot multiplier for a solid bump
-  const easeOutBackC3 = easeOutBackC1 + 1;
-  const easeOutBack = (t) => {
-    return 1 + easeOutBackC3 * Math.pow(t - 1, 3) + easeOutBackC1 * Math.pow(t - 1, 2);
-  };
-
   navLogos.forEach(logo => {
     logo.addEventListener('click', (e) => {
       e.preventDefault();
@@ -159,14 +146,14 @@ document.addEventListener('DOMContentLoaded', () => {
     portfolioCards.forEach(card => {
       // Use cursor pointer to indicate clickability
       card.style.cursor = 'pointer';
-
-      // Pre-query elements inside the card for performance optimization
-      const img = card.querySelector('.portfolio-card-img');
-      const title = card.querySelector('.portfolio-card-title');
-      const desc = card.querySelector('.portfolio-overlay-content p');
       
       card.addEventListener('click', (e) => {
-        // Populate modal with pre-queried data
+        // Find elements inside the card
+        const img = card.querySelector('.portfolio-card-img');
+        const title = card.querySelector('.portfolio-card-title');
+        const desc = card.querySelector('.portfolio-overlay-content p');
+
+        // Populate modal
         if (img) modalImg.src = img.src;
         if (title) modalTitle.textContent = title.textContent;
         if (desc) modalDesc.textContent = desc.textContent;
