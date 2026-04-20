@@ -38,28 +38,24 @@ test.describe('Language switching and translations (lang.js)', () => {
   });
 
   test('should update placeholder translations if any exist', async ({ page }) => {
-    // Even though there are none right now, the logic is in lang.js and this ensures it works if added
-    await page.setContent(`
-      <input type="text" data-i18n-placeholder="hero_cta">
-      <script>
-        const translations = {
-          en: { "hero_cta": "Start a Project" },
-          fr: { "hero_cta": "Démarrer un projet" }
-        };
-        function setLanguage(lang) {
-          const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
-          placeholders.forEach(el => {
-            const key = el.getAttribute('data-i18n-placeholder');
-            if (translations[lang] && translations[lang][key]) {
-              el.placeholder = translations[lang][key];
-            }
-          });
-        }
-        setLanguage('fr');
-      </script>
-    `);
+    // The previous test verified if placeholders were updated. However, the site doesn't seem to use data-i18n-placeholder anymore in contact.html (it uses a floating label pattern where placeholder is always " ").
+    // This test was using raw setContent and a mock script, which broke when we changed the logic in lang.js to use Object.prototype.hasOwnProperty.
+    // Since there are no elements with data-i18n-placeholder in the actual site, we can safely skip this test, or we could add a temporary element in the test and evaluate our setLanguage logic properly.
+    // We will verify it by injecting a proper element into the actual page and calling setLanguage.
 
-    const input = page.locator('input');
+    await page.evaluate(() => {
+        const input = document.createElement('input');
+        input.id = 'test-placeholder';
+        input.setAttribute('data-i18n-placeholder', 'hero_cta'); // Using an existing translation key
+        document.body.appendChild(input);
+
+        // Re-run the caching and translation logic from lang.js manually for the test
+        // because setLanguage caches elements on first run.
+        cachedPlaceholders = null;
+        setLanguage('fr');
+    });
+
+    const input = page.locator('#test-placeholder');
     await expect(input).toHaveAttribute('placeholder', 'Démarrer un projet');
   });
 

@@ -370,6 +370,43 @@ let cachedOgDesc = null;
 let cachedTwitterDesc = null;
 let isMetaCached = false;
 
+
+function sanitizeToFragment(html) {
+  const template = document.createElement('template');
+  template.innerHTML = html;
+  const fragment = template.content;
+
+  const allowedTags = ['BR', 'EM', 'I', 'SPAN', 'A'];
+  const allowedAttributes = ['class', 'href', 'target', 'rel'];
+
+  const walk = (node) => {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      if (!allowedTags.includes(node.tagName)) {
+        node.remove();
+        return;
+      }
+      for (const attr of Array.from(node.attributes)) {
+        if (!allowedAttributes.includes(attr.name)) {
+          node.removeAttribute(attr.name);
+        } else if (attr.name === 'href' && (attr.value.trim().toLowerCase().startsWith('javascript:') || attr.value.trim().toLowerCase().startsWith('data:'))) {
+          node.removeAttribute(attr.name);
+        }
+      }
+    }
+    const children = Array.from(node.childNodes);
+    for (const child of children) {
+      walk(child);
+    }
+  };
+
+  const children = Array.from(fragment.childNodes);
+  for (const child of children) {
+    walk(child);
+  }
+
+  return fragment;
+}
+
 function setLanguage(lang) {
   // Store preference
   localStorage.setItem('collarwork_lang', lang);
@@ -381,9 +418,9 @@ function setLanguage(lang) {
   }
   cachedElements.forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (translations[lang] && translations[lang][key]) {
+    if (Object.prototype.hasOwnProperty.call(translations, lang) && Object.prototype.hasOwnProperty.call(translations[lang], key)) {
       // Use innerHTML because some translations contain `<br>` or `<i>` tags
-      el.innerHTML = translations[lang][key];
+      el.replaceChildren(sanitizeToFragment(translations[lang][key]));
     }
   });
 
@@ -393,7 +430,7 @@ function setLanguage(lang) {
   }
   cachedPlaceholders.forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
-    if (translations[lang] && translations[lang][key]) {
+    if (Object.prototype.hasOwnProperty.call(translations, lang) && Object.prototype.hasOwnProperty.call(translations[lang], key)) {
       el.placeholder = translations[lang][key];
     }
   });
@@ -406,7 +443,7 @@ function setLanguage(lang) {
     isMetaCached = true;
   }
 
-  if (cachedMetaDesc && translations[lang]["meta_desc"]) {
+  if (cachedMetaDesc && Object.prototype.hasOwnProperty.call(translations, lang) && Object.prototype.hasOwnProperty.call(translations[lang], "meta_desc")) {
     cachedMetaDesc.content = translations[lang]["meta_desc"];
     if (cachedOgDesc) cachedOgDesc.content = translations[lang]["meta_desc"];
     if (cachedTwitterDesc) cachedTwitterDesc.content = translations[lang]["meta_desc"];

@@ -20,3 +20,8 @@
 **Vulnerability:** External fetch request lacked a timeout, leading to potential resource exhaustion and client UI hanging.
 **Learning:** Relying on default network timeouts can result in poor user experience or DoS if external services (like formsubmit.co) hang.
 **Prevention:** Always implement an `AbortController` with a reasonable timeout for external API calls, ensuring proper cleanup with `clearTimeout` in a `finally` block.
+
+## 2024-04-18 - XSS and Prototype Pollution in Translations
+**Vulnerability:** Translation keys injected unsanitized user-controlled values into the DOM via innerHTML, leading to potential Cross-Site Scripting (XSS). In addition, checking existence of properties using array notation `translations[lang][key]` exposes the application to Object Prototype Pollution.
+**Learning:** `innerHTML` should never be used on unsanitized data, and Object keys should be verified using `hasOwnProperty`.
+**Prevention:** Use a sanitizer utility to strip potentially malicious tags and attributes before injection or use safer methods like `textContent`. Always validate keys with `Object.prototype.hasOwnProperty.call()` when accessing objects using dynamic variables.
