@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Collect form data
       const formData = new FormData(form);
 
-      // Submit to FormSubmit
+      // Submit to Mailer Worker
       const response = await fetch(form.action, {
         method: 'POST',
         body: formData,
