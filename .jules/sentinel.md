@@ -25,3 +25,8 @@
 **Vulnerability:** Translation keys injected unsanitized user-controlled values into the DOM via innerHTML, leading to potential Cross-Site Scripting (XSS). In addition, checking existence of properties using array notation `translations[lang][key]` exposes the application to Object Prototype Pollution.
 **Learning:** `innerHTML` should never be used on unsanitized data, and Object keys should be verified using `hasOwnProperty`.
 **Prevention:** Use a sanitizer utility to strip potentially malicious tags and attributes before injection or use safer methods like `textContent`. Always validate keys with `Object.prototype.hasOwnProperty.call()` when accessing objects using dynamic variables.
+
+## 2026-04-20 - Deprecated formsubmit.co in Content-Security-Policy
+**Vulnerability:** The `form-action` directive in the Content-Security-Policy (CSP) of `404.html`, `privacy.html`, and `terms.html` pointed to the deprecated `https://formsubmit.co` instead of the project's custom mailer endpoint.
+**Learning:** Inconsistent application of security policies across multiple HTML files can leave parts of the site using outdated or incorrect configurations when services are migrated.
+**Prevention:** Maintain consistency in security headers (like CSP) across all pages of the site. Use automated checks or templates to ensure that when a service endpoint is updated, it is reflected in all relevant policy directives.
