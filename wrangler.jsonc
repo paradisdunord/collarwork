@@ -3,18 +3,7 @@
   "name": "collarwork",
   "compatibility_date": "2026-04-16",
   "observability": {
-    "enabled": true
-  },
-  "assets": {
-    "directory": "."
-  },
-  "compatibility_flags": [
-    "nodejs_compat"
-  ]
-}
-{
-  "observability": {
-    "enabled": false,
+    "enabled": true,
     "head_sampling_rate": 1,
     "logs": {
       "enabled": true,
@@ -27,5 +16,11 @@
       "persist": true,
       "head_sampling_rate": 1
     }
-  }
+  },
+  "assets": {
+    "directory": "."
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
 }
