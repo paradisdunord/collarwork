@@ -61,7 +61,7 @@ function initScrollToTop() {
     logo.addEventListener('click', (e) => {
       // If the link points to index.html and we're NOT on the homepage, let standard navigation happen
       const href = logo.getAttribute('href');
-      const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
+      const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
       if (href === 'index.html' && !isIndexPage) {
         return; 
       }
