@@ -163,17 +163,19 @@ function initPortfolioLightbox() {
       // Use cursor pointer to indicate clickability
       item.style.cursor = 'pointer';
 
-      item.addEventListener('click', (e) => {
-        // Defer DOM queries until click
-        const imgSrc = item.getAttribute('data-image');
-        const title = item.querySelector('.kinetic-title');
-        const desc = item.querySelector('.kinetic-desc');
+      // Cache child references to avoid redundant DOM queries on click
+      const imgSrc = item.getAttribute('data-image');
+      const titleEl = item.querySelector('.kinetic-title');
+      const descEl = item.querySelector('.kinetic-desc');
+      const titleText = titleEl ? titleEl.textContent : '';
+      const descText = descEl ? descEl.textContent : '';
 
-        // Populate modal
+      item.addEventListener('click', () => {
+        // Populate modal using cached values
         if (imgSrc) modalImg.src = imgSrc;
-        if (title) modalTitle.textContent = title.textContent;
+        modalTitle.textContent = titleText;
         if (modalDesc) {
-          modalDesc.textContent = desc ? desc.textContent : '';
+          modalDesc.textContent = descText;
         }
 
         // Open modal
