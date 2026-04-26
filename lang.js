@@ -388,8 +388,11 @@ function sanitizeToFragment(html) {
       for (const attr of Array.from(node.attributes)) {
         if (!allowedAttributes.includes(attr.name)) {
           node.removeAttribute(attr.name);
-        } else if (attr.name === 'href' && (attr.value.trim().toLowerCase().startsWith('javascript:') || attr.value.trim().toLowerCase().startsWith('data:'))) {
-          node.removeAttribute(attr.name);
+        } else if (attr.name === 'href') {
+          const strippedValue = attr.value.replace(/[\x00-\x20\s]+/g, '').toLowerCase();
+          if (strippedValue.startsWith('javascript:') || strippedValue.startsWith('data:')) {
+            node.removeAttribute(attr.name);
+          }
         }
       }
     }

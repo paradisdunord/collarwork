@@ -30,3 +30,8 @@
 **Vulnerability:** The `form-action` directive in the Content-Security-Policy (CSP) of `404.html`, `privacy.html`, and `terms.html` pointed to the deprecated `https://formsubmit.co` instead of the project's custom mailer endpoint.
 **Learning:** Inconsistent application of security policies across multiple HTML files can leave parts of the site using outdated or incorrect configurations when services are migrated.
 **Prevention:** Maintain consistency in security headers (like CSP) across all pages of the site. Use automated checks or templates to ensure that when a service endpoint is updated, it is reflected in all relevant policy directives.
+
+## 2026-04-26 - Bypassable javascript: URI sanitization
+**Vulnerability:** The sanitization logic for `href` attributes in `lang.js` only trimmed whitespace at the start and end of the string before checking for `javascript:` or `data:` protocols. This allowed attackers to bypass the check by inserting tabs, newlines, or control characters within the protocol string (e.g., `java\tscript:`), leading to Cross-Site Scripting (XSS).
+**Learning:** Browsers are highly permissive and will ignore whitespace and control characters (ASCII 0x00-0x20) within URLs, executing them anyway. Simple trimming is insufficient for preventing protocol-based XSS.
+**Prevention:** Always strip all whitespace and control characters from the attribute value (`.replace(/[\x00-\x20\s]+/g, '')`) before checking the protocol for `javascript:` or `data:` to ensure the sanitization cannot be bypassed.
