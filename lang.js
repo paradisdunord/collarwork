@@ -412,15 +412,21 @@ function setLanguage(lang) {
   localStorage.setItem('collarwork_lang', lang);
   document.documentElement.lang = lang === 'en' ? 'en' : 'fr-CA';
 
+  if (!Object.prototype.hasOwnProperty.call(translations, lang)) {
+    return;
+  }
+
+  const currentTranslations = translations[lang];
+
   // Translate all elements with data-i18n
   if (!cachedElements) {
     cachedElements = document.querySelectorAll('[data-i18n]');
   }
   cachedElements.forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (Object.prototype.hasOwnProperty.call(translations, lang) && Object.prototype.hasOwnProperty.call(translations[lang], key)) {
+    if (Object.prototype.hasOwnProperty.call(currentTranslations, key)) {
       // Use innerHTML because some translations contain `<br>` or `<i>` tags
-      el.replaceChildren(sanitizeToFragment(translations[lang][key]));
+      el.replaceChildren(sanitizeToFragment(currentTranslations[key]));
     }
   });
 
@@ -430,8 +436,8 @@ function setLanguage(lang) {
   }
   cachedPlaceholders.forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
-    if (Object.prototype.hasOwnProperty.call(translations, lang) && Object.prototype.hasOwnProperty.call(translations[lang], key)) {
-      el.placeholder = translations[lang][key];
+    if (Object.prototype.hasOwnProperty.call(currentTranslations, key)) {
+      el.placeholder = currentTranslations[key];
     }
   });
 
@@ -443,9 +449,9 @@ function setLanguage(lang) {
     isMetaCached = true;
   }
 
-  if (cachedMetaDesc && Object.prototype.hasOwnProperty.call(translations, lang) && Object.prototype.hasOwnProperty.call(translations[lang], "meta_desc")) {
-    cachedMetaDesc.content = translations[lang]["meta_desc"];
-    if (cachedOgDesc) cachedOgDesc.content = translations[lang]["meta_desc"];
-    if (cachedTwitterDesc) cachedTwitterDesc.content = translations[lang]["meta_desc"];
+  if (cachedMetaDesc && Object.prototype.hasOwnProperty.call(currentTranslations, "meta_desc")) {
+    cachedMetaDesc.content = currentTranslations["meta_desc"];
+    if (cachedOgDesc) cachedOgDesc.content = currentTranslations["meta_desc"];
+    if (cachedTwitterDesc) cachedTwitterDesc.content = currentTranslations["meta_desc"];
   }
 }
