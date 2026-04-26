@@ -116,6 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const cachedErrorEls = {};
   const cachedGroups = {};
 
+  // Cache elements for resetForm
+  const formInputs = Array.from(form.querySelectorAll('.floating-input'));
+  const formGroups = Array.from(form.querySelectorAll('.floating-group'));
+
   Object.keys(validationRules).forEach(fieldId => {
     const field = document.getElementById(fieldId);
     if (field) {
@@ -212,10 +216,10 @@ document.addEventListener('DOMContentLoaded', () => {
     errorMessage.classList.remove('is-visible');
 
     // Clear all validation states
-    form.querySelectorAll('.floating-input').forEach(input => {
+    formInputs.forEach(input => {
       input.classList.remove('has-error', 'is-valid');
     });
-    form.querySelectorAll('.floating-group').forEach(group => {
+    formGroups.forEach(group => {
       group.classList.remove('has-error');
     });
 
