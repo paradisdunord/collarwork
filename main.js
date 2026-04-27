@@ -79,7 +79,7 @@ function initScrollToTop() {
         const progress = timestamp - startTime;
         let t = Math.min(progress / duration, 1);
         
-        let easedT = window.easeOutBack(t);
+        let easedT = easeOutBack(t);
         let targetY = startY * (1 - easedT);
 
         if (targetY < 0) {
