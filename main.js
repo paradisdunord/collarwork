@@ -203,3 +203,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initCursorReveal();
   initPortfolioLightbox();
 });
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    easeOutBack,
+    initPortfolioLightbox
+  };
+}
