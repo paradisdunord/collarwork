@@ -35,3 +35,8 @@
 **Vulnerability:** The sanitization logic for `href` attributes in `lang.js` only trimmed whitespace at the start and end of the string before checking for `javascript:` or `data:` protocols. This allowed attackers to bypass the check by inserting tabs, newlines, or control characters within the protocol string (e.g., `java\tscript:`), leading to Cross-Site Scripting (XSS).
 **Learning:** Browsers are highly permissive and will ignore whitespace and control characters (ASCII 0x00-0x20) within URLs, executing them anyway. Simple trimming is insufficient for preventing protocol-based XSS.
 **Prevention:** Always strip all whitespace and control characters from the attribute value (`.replace(/[\x00-\x20\s]+/g, '')`) before checking the protocol for `javascript:` or `data:` to ensure the sanitization cannot be bypassed.
+
+## 2026-04-29 - Frame-Busting Script Bypass
+**Vulnerability:** The `window.top.location = window.self.location` frame-busting script was vulnerable to being bypassed if the site was embedded in an iframe using the `sandbox` attribute without the `allow-top-navigation` flag.
+**Learning:** Malicious sites can easily block top-level frame redirects by framing the site with restrictive sandbox policies. This leaves the site open to clickjacking as the frame-busting logic silently fails.
+**Prevention:** Enhance the frame-busting script by immediately hiding the document body or HTML element (e.g., `document.documentElement.style.display = 'none';`) before assigning `window.top.location`. This ensures that even if the redirection is blocked, the site's content remains hidden and un-interactable.
