@@ -25,7 +25,7 @@ test.describe('Portfolio Lightbox', () => {
     const modal = page.locator('#portfolio-modal');
     await expect(modal).toHaveClass(/is-open/);
     await expect(modal).toHaveAttribute('aria-hidden', 'false');
-    await expect(page.locator('body')).toHaveStyle({ overflow: 'hidden' });
+    await expect(page.locator('body')).toHaveCSS('overflow', 'hidden');
 
     // Verify content
     const modalTitle = page.locator('#modal-title');
@@ -49,7 +49,7 @@ test.describe('Portfolio Lightbox', () => {
 
     await expect(modal).not.toHaveClass(/is-open/);
     await expect(modal).toHaveAttribute('aria-hidden', 'true');
-    await expect(page.locator('body')).not.toHaveStyle({ overflow: 'hidden' });
+    await expect(page.locator('body')).not.toHaveCSS('overflow', 'hidden');
   });
 
   test('should close modal when overlay is clicked', async ({ page }) => {
