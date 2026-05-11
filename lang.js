@@ -389,9 +389,17 @@ function sanitizeToFragment(html) {
         if (!allowedAttributes.includes(attr.name)) {
           node.removeAttribute(attr.name);
         } else if (attr.name === 'href') {
+          // 🛡️ Sentinel: Enhance XSS protection using a strict protocol allowlist instead of a blocklist
           const strippedValue = attr.value.replace(/[\x00-\x20\s]+/g, '').toLowerCase();
-          if (strippedValue.startsWith('javascript:') || strippedValue.startsWith('data:')) {
-            node.removeAttribute(attr.name);
+
+          // Check if it has a protocol (contains ':')
+          if (strippedValue.includes(':')) {
+            const allowedProtocols = ['http:', 'https:', 'mailto:', 'tel:'];
+            const hasAllowedProtocol = allowedProtocols.some(protocol => strippedValue.startsWith(protocol));
+
+            if (!hasAllowedProtocol) {
+              node.removeAttribute(attr.name);
+            }
           }
         }
       }

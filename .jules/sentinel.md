@@ -40,3 +40,7 @@
 **Vulnerability:** The `window.top.location = window.self.location` frame-busting script was vulnerable to being bypassed if the site was embedded in an iframe using the `sandbox` attribute without the `allow-top-navigation` flag.
 **Learning:** Malicious sites can easily block top-level frame redirects by framing the site with restrictive sandbox policies. This leaves the site open to clickjacking as the frame-busting logic silently fails.
 **Prevention:** Enhance the frame-busting script by immediately hiding the document body or HTML element (e.g., `document.documentElement.style.display = 'none';`) before assigning `window.top.location`. This ensures that even if the redirection is blocked, the site's content remains hidden and un-interactable.
+## 2026-05-11 - URI Protocol Sanitization Bypass
+**Vulnerability:** The sanitization logic for `href` attributes in `lang.js` used a blocklist (blocking `javascript:` and `data:`) which could be bypassed by obscure or older protocols like `vbscript:` or `file:`.
+**Learning:** Relying on blocklists for input sanitization is inherently risky as it is difficult to anticipate all possible attack vectors or obscure features browsers might support.
+**Prevention:** Always use a strict allowlist for sensitive attributes like `href`. For protocols, only permit explicitly allowed schemes (e.g., `http:`, `https:`, `mailto:`, `tel:`) while continuing to allow relative URLs.

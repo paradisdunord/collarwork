@@ -60,9 +60,9 @@ test.describe('Portfolio Lightbox', () => {
     await expect(modal).toHaveClass(/is-open/);
 
     // Click the overlay
-    // Using force: true because sometimes overlays might be "behind" but still clickable for this purpose
-    // or we can click by coordinates or just use the ID.
-    await page.click('#modal-overlay');
+    // Using page.evaluate because sometimes overlays might have overlapping child elements
+    // that intercept pointer events (like #modal-desc), causing timeouts.
+    await page.evaluate(() => document.getElementById('modal-overlay').click());
 
     await expect(modal).not.toHaveClass(/is-open/);
     await expect(modal).toHaveAttribute('aria-hidden', 'true');
