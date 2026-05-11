@@ -35,11 +35,13 @@ const validationRules = {
     errorMessage: "Please describe your project goals (at least 20 characters)",
   },
   "project-urgency": {
+  'project-urgency': {
     required: true,
     errorId: "urgency-error",
     errorMessage: "Please select a timeline",
   },
   "project-budget": {
+  'project-budget': {
     required: true,
     errorId: "budget-error",
     errorMessage: "Please select a budget range",
@@ -53,8 +55,8 @@ function validateField(field, cachedGroups = {}, cachedErrorEls = {}) {
   const rules = validationRules[field.id];
   if (!rules) return true;
 
-  const value = field.value.trim();
-  const group = cachedGroups[field.id] || field.closest(".floating-group");
+  const value = field.value ? field.value.trim() : '';
+  const group = cachedGroups[field.id] || (field.closest && field.closest('.floating-group'));
   let isValid = true;
   let errorMessage = rules.errorMessage;
 
@@ -74,36 +76,54 @@ function validateField(field, cachedGroups = {}, cachedErrorEls = {}) {
   }
 
   // Update UI
-  if (!isValid) {
-    if (group) group.classList.add("has-error");
-    field.classList.add("has-error");
-    field.classList.remove("is-valid");
+  if (group && field) {
+    if (!isValid) {
+      group.classList.add('has-error');
+      field.classList.add('has-error');
+      field.classList.remove('is-valid');
 
-    const errorEl =
-      cachedErrorEls[field.id] || document.getElementById(rules.errorId);
-    if (errorEl) {
-      errorEl.textContent = errorMessage;
-    }
-  } else {
-    if (group) group.classList.remove("has-error");
-    field.classList.remove("has-error");
-    if (value) {
-      field.classList.add("is-valid");
+      const errorEl = cachedErrorEls[field.id] || (typeof document !== 'undefined' && document.getElementById(rules.errorId));
+      if (errorEl) {
+        errorEl.textContent = errorMessage;
+      }
+    } else {
+      group.classList.remove('has-error');
+      field.classList.remove('has-error');
+      if (value) {
+        field.classList.add('is-valid');
+      }
     }
   }
 
   return isValid;
 }
 
-/**
- * Validate all required fields
- */
-function validateForm(cachedFields, cachedGroups, cachedErrorEls) {
-  let isValid = true;
-  let firstInvalidField = null;
+// Expose for testing
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { validationRules, validateField };
+}
 
-  Object.keys(validationRules).forEach((fieldId) => {
-    const field = cachedFields[fieldId];
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('project-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const successMessage = document.getElementById('form-success');
+  const errorMessage = document.getElementById('form-error');
+  const resetBtn = document.getElementById('reset-form');
+  const retryBtn = document.getElementById('retry-form');
+
+  if (!form) return;
+
+  // Cache DOM elements
+  const cachedFields = {};
+  const cachedErrorEls = {};
+  const cachedGroups = {};
+
+  // Cache elements for resetForm
+  const formInputs = Array.from(form.querySelectorAll('.floating-input'));
+  const formGroups = Array.from(form.querySelectorAll('.floating-group'));
+
+  Object.keys(validationRules).forEach(fieldId => {
+    const field = document.getElementById(fieldId);
     if (field) {
       const fieldValid = validateField(field, cachedGroups, cachedErrorEls);
       if (!fieldValid && !firstInvalidField) {
@@ -115,12 +135,34 @@ function validateForm(cachedFields, cachedGroups, cachedErrorEls) {
     }
   });
 
-  // Scroll to first invalid field with shake animation
-  if (firstInvalidField) {
-    const group = firstInvalidField.closest(".floating-group");
-    if (group) {
-      group.classList.add("shake");
-      setTimeout(() => group.classList.remove("shake"), 400);
+  /**
+   * Validate all required fields
+   */
+  function validateForm() {
+    let isValid = true;
+    let firstInvalidField = null;
+
+    Object.keys(validationRules).forEach(fieldId => {
+      const field = cachedFields[fieldId];
+      if (field) {
+        const fieldValid = validateField(field, cachedGroups, cachedErrorEls);
+        if (!fieldValid && !firstInvalidField) {
+          firstInvalidField = field;
+        }
+        if (!fieldValid) {
+          isValid = false;
+        }
+      }
+    });
+
+    // Scroll to first invalid field with shake animation
+    if (firstInvalidField) {
+      const group = firstInvalidField.closest('.floating-group');
+      group.classList.add('shake');
+      setTimeout(() => group.classList.remove('shake'), 400);
+
+      firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      firstInvalidField.focus();
     }
     firstInvalidField.scrollIntoView({ behavior: "smooth", block: "center" });
     firstInvalidField.focus();
@@ -213,25 +255,21 @@ async function handleFormSubmit(
     return;
   }
 
-  // Set loading state
-  setLoading(true, submitBtn);
+  /**
+   * Reset form to initial state
+   */
+  function resetForm() {
+    form.reset();
+    form.classList.remove('is-hidden');
+    successMessage.classList.remove('is-visible');
+    errorMessage.classList.remove('is-visible');
 
-  // 🛡️ Sentinel: Add timeout to external API calls to prevent UI hanging
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-  try {
-    // Collect form data
-    const formData = new FormData(form);
-
-    // Submit to FormSubmit
-    const response = await fetch(form.action, {
-      method: "POST",
-      body: formData,
-      headers: {
-        Accept: "application/json",
-      },
-      signal: controller.signal,
+    // Clear all validation states
+    formInputs.forEach(input => {
+      input.classList.remove('has-error', 'is-valid');
+    });
+    formGroups.forEach(group => {
+      group.classList.remove('has-error');
     });
 
     if (response.ok) {
@@ -283,9 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
   Object.keys(validationRules).forEach((fieldId) => {
     const field = document.getElementById(fieldId);
     if (field) {
-      field.addEventListener("blur", () =>
-        validateField(field, cachedGroups, cachedErrorEls),
-      );
+      field.addEventListener('blur', () => validateField(field, cachedGroups, cachedErrorEls));
 
       // Clear error on input
       field.addEventListener("input", () => {
@@ -301,16 +337,44 @@ document.addEventListener("DOMContentLoaded", () => {
   // Form submission
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    await handleFormSubmit(
-      e,
-      form,
-      submitBtn,
-      successMessage,
-      errorMessage,
-      cachedFields,
-      cachedGroups,
-      cachedErrorEls,
-    );
+
+    // Validate form
+    if (!validateForm()) {
+      return;
+    }
+
+    // Set loading state
+    setLoading(true);
+
+    // 🛡️ Sentinel: Add timeout to external API calls to prevent UI hanging
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+    try {
+      // Collect form data
+      const formData = new FormData(form);
+
+      // Submit to Mailer Worker
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        },
+        signal: controller.signal
+      });
+
+      if (response.ok) {
+        showSuccess();
+      } else {
+        throw new Error('Form submission failed');
+      }
+    } catch (error) {
+      showError('There was an error sending your message. Please try again or email us directly at hello@collarworkdesign.com');
+    } finally {
+      clearTimeout(timeoutId);
+      setLoading(false);
+    }
   });
 
   // Reset button handlers

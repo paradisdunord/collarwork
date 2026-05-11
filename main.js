@@ -23,13 +23,16 @@ if (typeof module !== 'undefined' && module.exports) {
 // Anti-Clickjacking: Frame-busting script
 // Required because GitHub Pages doesn't allow X-Frame-Options headers
 // and CSP <meta> tags don't support the frame-ancestors directive.
-if (window.top !== window.self) {
+if (typeof window !== 'undefined' && window.top !== window.self) {
+  // Hide content immediately in case top.location redirect is blocked by sandbox attributes
+  document.documentElement.style.display = 'none';
   window.top.location = window.self.location;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-
-  // 1. Mobile Navigation Toggle
+/**
+ * 1. Mobile Navigation Toggle
+ */
+function initMobileNav() {
   const navToggle = document.getElementById('nav-toggle');
   const navLinks = document.getElementById('nav-links');
   const navLinkItems = document.querySelectorAll('.nav-link');
@@ -48,15 +51,19 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+}
 
-  // 2. Hyper-Fast Scroll to Top with Elastic Bump (Logo click)
+/**
+ * 2. Hyper-Fast Scroll to Top with Elastic Bump (Logo click)
+ */
+function initScrollToTop() {
   const navLogos = document.querySelectorAll('.nav-logo');
 
   navLogos.forEach(logo => {
     logo.addEventListener('click', (e) => {
       // If the link points to index.html and we're NOT on the homepage, let standard navigation happen
       const href = logo.getAttribute('href');
-      const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
+      const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
       if (href === 'index.html' && !isIndexPage) {
         return; 
       }
@@ -74,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const progress = timestamp - startTime;
         let t = Math.min(progress / duration, 1);
         
-        let easedT = window.easeOutBack(t);
+        let easedT = easeOutBack(t);
         let targetY = startY * (1 - easedT);
 
         if (targetY < 0) {
@@ -98,8 +105,12 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(step);
     });
   });
+}
 
-  // 3. Interactive Typographic List (Cursor Reveal)
+/**
+ * 3. Interactive Typographic List (Cursor Reveal)
+ */
+function initCursorReveal() {
   const kineticList = document.querySelector('.portfolio-kinetic-list');
   const cursorImg = document.getElementById('cursor-reveal-img');
   
@@ -129,8 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+}
 
-  // 4. Portfolio Lightbox Modal (Adapted for Kinetic List)
+/**
+ * 4. Portfolio Lightbox Modal (Adapted for Kinetic List)
+ */
+function initPortfolioLightbox() {
   const kineticItems = document.querySelectorAll('.kinetic-item');
   const modal = document.getElementById('portfolio-modal');
   const modalImg = document.getElementById('modal-img');
@@ -150,17 +165,19 @@ document.addEventListener('DOMContentLoaded', () => {
       // Use cursor pointer to indicate clickability
       item.style.cursor = 'pointer';
 
-      item.addEventListener('click', (e) => {
-        // Defer DOM queries until click
-        const imgSrc = item.getAttribute('data-image');
-        const title = item.querySelector('.kinetic-title');
-        const desc = item.querySelector('.kinetic-desc');
+      // Cache child references to avoid redundant DOM queries on click
+      const imgSrc = item.getAttribute('data-image');
+      const titleEl = item.querySelector('.kinetic-title');
+      const descEl = item.querySelector('.kinetic-desc');
+      const titleText = titleEl ? titleEl.textContent : '';
+      const descText = descEl ? descEl.textContent : '';
 
-        // Populate modal
+      item.addEventListener('click', () => {
+        // Populate modal using cached values
         if (imgSrc) modalImg.src = imgSrc;
-        if (title) modalTitle.textContent = title.textContent;
+        modalTitle.textContent = titleText;
         if (modalDesc) {
-          modalDesc.textContent = desc ? desc.textContent : '';
+          modalDesc.textContent = descText;
         }
 
         // Open modal
@@ -180,6 +197,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+}
 
-
+document.addEventListener('DOMContentLoaded', () => {
+  initMobileNav();
+  initScrollToTop();
+  initCursorReveal();
+  initPortfolioLightbox();
 });
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    easeOutBack,
+    initPortfolioLightbox
+  };
+}
