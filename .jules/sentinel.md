@@ -25,3 +25,8 @@
 **Vulnerability:** Translation keys injected unsanitized user-controlled values into the DOM via innerHTML, leading to potential Cross-Site Scripting (XSS). In addition, checking existence of properties using array notation `translations[lang][key]` exposes the application to Object Prototype Pollution.
 **Learning:** `innerHTML` should never be used on unsanitized data, and Object keys should be verified using `hasOwnProperty`.
 **Prevention:** Use a sanitizer utility to strip potentially malicious tags and attributes before injection or use safer methods like `textContent`. Always validate keys with `Object.prototype.hasOwnProperty.call()` when accessing objects using dynamic variables.
+
+## 2026-05-11 - Testability via Dependency Injection
+**Vulnerability:** Monolithic `DOMContentLoaded` callbacks referencing closure scope elements inhibit robust unit testing and degrade code modularity.
+**Learning:** Hard-coding DOM lookups and internal state configuration inside an anonymous initialization function makes logic untestable in isolation, leading to regression risks.
+**Prevention:** Extract key business logic (like validation handling and form submission) into pure, named functions taking dependent DOM elements and required cache objects as arguments (Dependency Injection).
