@@ -26,6 +26,10 @@
 **Learning:** `innerHTML` should never be used on unsanitized data, and Object keys should be verified using `hasOwnProperty`.
 **Prevention:** Use a sanitizer utility to strip potentially malicious tags and attributes before injection or use safer methods like `textContent`. Always validate keys with `Object.prototype.hasOwnProperty.call()` when accessing objects using dynamic variables.
 
+## 2026-05-11 - Testability via Dependency Injection
+**Vulnerability:** Monolithic `DOMContentLoaded` callbacks referencing closure scope elements inhibit robust unit testing and degrade code modularity.
+**Learning:** Hard-coding DOM lookups and internal state configuration inside an anonymous initialization function makes logic untestable in isolation, leading to regression risks.
+**Prevention:** Extract key business logic (like validation handling and form submission) into pure, named functions taking dependent DOM elements and required cache objects as arguments (Dependency Injection).
 ## 2026-04-20 - Deprecated formsubmit.co in Content-Security-Policy
 **Vulnerability:** The `form-action` directive in the Content-Security-Policy (CSP) of `404.html`, `privacy.html`, and `terms.html` pointed to the deprecated `https://formsubmit.co` instead of the project's custom mailer endpoint.
 **Learning:** Inconsistent application of security policies across multiple HTML files can leave parts of the site using outdated or incorrect configurations when services are migrated.
