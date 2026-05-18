@@ -56,7 +56,10 @@ function validateField(field, cachedGroups = {}, cachedErrorEls = {}) {
   if (!rules) return true;
 
   const value = field.value ? field.value.trim() : '';
-  const group = cachedGroups[field.id] || (field.closest && field.closest('.floating-group'));
+  if (!cachedGroups[field.id] && field.closest) {
+    cachedGroups[field.id] = field.closest('.floating-group');
+  }
+  const group = cachedGroups[field.id];
   let isValid = true;
   let errorMessage = rules.errorMessage;
 
@@ -82,7 +85,10 @@ function validateField(field, cachedGroups = {}, cachedErrorEls = {}) {
       field.classList.add('has-error');
       field.classList.remove('is-valid');
 
-      const errorEl = cachedErrorEls[field.id] || (typeof document !== 'undefined' && document.getElementById(rules.errorId));
+      if (!cachedErrorEls[field.id] && typeof document !== 'undefined') {
+        cachedErrorEls[field.id] = document.getElementById(rules.errorId);
+      }
+      const errorEl = cachedErrorEls[field.id];
       if (errorEl) {
         errorEl.textContent = errorMessage;
       }
