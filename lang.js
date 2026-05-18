@@ -370,23 +370,24 @@ let cachedOgDesc = null;
 let cachedTwitterDesc = null;
 let isMetaCached = false;
 
+// Security whitelists for sanitizeToFragment
+const allowedTags = new Set(['BR', 'EM', 'I', 'SPAN', 'A']);
+const allowedAttributes = new Set(['class', 'href', 'target', 'rel']);
+
 
 function sanitizeToFragment(html) {
   const template = document.createElement('template');
   template.innerHTML = html;
   const fragment = template.content;
 
-  const allowedTags = ['BR', 'EM', 'I', 'SPAN', 'A'];
-  const allowedAttributes = ['class', 'href', 'target', 'rel'];
-
   const walk = (node) => {
     if (node.nodeType === Node.ELEMENT_NODE) {
-      if (!allowedTags.includes(node.tagName)) {
+      if (!allowedTags.has(node.tagName)) {
         node.remove();
         return;
       }
       for (const attr of Array.from(node.attributes)) {
-        if (!allowedAttributes.includes(attr.name)) {
+        if (!allowedAttributes.has(attr.name)) {
           node.removeAttribute(attr.name);
         } else if (attr.name === 'href') {
           // 🛡️ Sentinel: Enhance XSS protection using a strict protocol allowlist instead of a blocklist
