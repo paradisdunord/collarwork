@@ -390,8 +390,14 @@ function sanitizeToFragment(html) {
           node.removeAttribute(attr.name);
         } else if (attr.name === 'href') {
           const strippedValue = attr.value.replace(/[\x00-\x20\s]+/g, '').toLowerCase();
-          if (strippedValue.startsWith('javascript:') || strippedValue.startsWith('data:')) {
-            node.removeAttribute(attr.name);
+          const isAbsolute = /^(?:[a-z][a-z0-9+.-]*):/i.test(strippedValue);
+          if (isAbsolute) {
+            const allowedProtocols = ['http:', 'https:', 'mailto:', 'tel:'];
+            const protocolMatch = strippedValue.match(/^([a-z][a-z0-9+.-]*):/i);
+            const protocol = protocolMatch ? protocolMatch[0] : '';
+            if (!allowedProtocols.includes(protocol)) {
+              node.removeAttribute(attr.name);
+            }
           }
         }
       }
@@ -457,4 +463,8 @@ function setLanguage(lang) {
     if (cachedOgDesc) cachedOgDesc.content = currentTranslations["meta_desc"];
     if (cachedTwitterDesc) cachedTwitterDesc.content = currentTranslations["meta_desc"];
   }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { sanitizeToFragment, setLanguage };
 }
