@@ -467,3 +467,10 @@ function setLanguage(lang) {
     if (cachedTwitterDesc) cachedTwitterDesc.content = currentTranslations["meta_desc"];
   }
 }
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    sanitizeToFragment,
+    setLanguage
+  };
+}
