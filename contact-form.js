@@ -34,13 +34,11 @@ const validationRules = {
     errorId: "goals-error",
     errorMessage: "Please describe your project goals (at least 20 characters)",
   },
-  "project-urgency": {
   'project-urgency': {
     required: true,
     errorId: "urgency-error",
     errorMessage: "Please select a timeline",
   },
-  "project-budget": {
   'project-budget': {
     required: true,
     errorId: "budget-error",
@@ -103,73 +101,7 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = { validationRules, validateField };
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('project-form');
-  const submitBtn = document.getElementById('submit-btn');
-  const successMessage = document.getElementById('form-success');
-  const errorMessage = document.getElementById('form-error');
-  const resetBtn = document.getElementById('reset-form');
-  const retryBtn = document.getElementById('retry-form');
 
-  if (!form) return;
-
-  // Cache DOM elements
-  const cachedFields = {};
-  const cachedErrorEls = {};
-  const cachedGroups = {};
-
-  // Cache elements for resetForm
-  const formInputs = Array.from(form.querySelectorAll('.floating-input'));
-  const formGroups = Array.from(form.querySelectorAll('.floating-group'));
-
-  Object.keys(validationRules).forEach(fieldId => {
-    const field = document.getElementById(fieldId);
-    if (field) {
-      const fieldValid = validateField(field, cachedGroups, cachedErrorEls);
-      if (!fieldValid && !firstInvalidField) {
-        firstInvalidField = field;
-      }
-      if (!fieldValid) {
-        isValid = false;
-      }
-    }
-  });
-
-  /**
-   * Validate all required fields
-   */
-  function validateForm() {
-    let isValid = true;
-    let firstInvalidField = null;
-
-    Object.keys(validationRules).forEach(fieldId => {
-      const field = cachedFields[fieldId];
-      if (field) {
-        const fieldValid = validateField(field, cachedGroups, cachedErrorEls);
-        if (!fieldValid && !firstInvalidField) {
-          firstInvalidField = field;
-        }
-        if (!fieldValid) {
-          isValid = false;
-        }
-      }
-    });
-
-    // Scroll to first invalid field with shake animation
-    if (firstInvalidField) {
-      const group = firstInvalidField.closest('.floating-group');
-      group.classList.add('shake');
-      setTimeout(() => group.classList.remove('shake'), 400);
-
-      firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      firstInvalidField.focus();
-    }
-    firstInvalidField.scrollIntoView({ behavior: "smooth", block: "center" });
-    firstInvalidField.focus();
-  }
-
-  return isValid;
-}
 
 /**
  * Show loading state
@@ -237,60 +169,10 @@ function resetForm(form, successMessage, errorMessage) {
   form.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-/**
- * Handle form submission
- */
-async function handleFormSubmit(
-  e,
-  form,
-  submitBtn,
-  successMessage,
-  errorMessage,
-  cachedFields,
-  cachedGroups,
-  cachedErrorEls,
-) {
-  // Validate form
-  if (!validateForm(cachedFields, cachedGroups, cachedErrorEls)) {
-    return;
-  }
 
-  /**
-   * Reset form to initial state
-   */
-  function resetForm() {
-    form.reset();
-    form.classList.remove('is-hidden');
-    successMessage.classList.remove('is-visible');
-    errorMessage.classList.remove('is-visible');
 
-    // Clear all validation states
-    formInputs.forEach(input => {
-      input.classList.remove('has-error', 'is-valid');
-    });
-    formGroups.forEach(group => {
-      group.classList.remove('has-error');
-    });
-
-    if (response.ok) {
-      showSuccess(form, successMessage, errorMessage);
-    } else {
-      throw new Error("Form submission failed");
-    }
-  } catch (error) {
-    showError(
-      "There was an error sending your message. Please try again or email us directly at hello@collarworkdesign.com",
-      form,
-      successMessage,
-      errorMessage,
-    );
-  } finally {
-    clearTimeout(timeoutId);
-    setLoading(false, submitBtn);
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
+if (typeof document !== 'undefined') {
+  document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("project-form");
   const submitBtn = document.getElementById("submit-btn");
   const successMessage = document.getElementById("form-success");
@@ -317,6 +199,41 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+
+
+  /**
+   * Validate all required fields
+   */
+  function validateForm() {
+    let isValid = true;
+    let firstInvalidField = null;
+
+    Object.keys(validationRules).forEach(fieldId => {
+      const field = cachedFields[fieldId];
+      if (field) {
+        const fieldValid = validateField(field, cachedGroups, cachedErrorEls);
+        if (!fieldValid && !firstInvalidField) {
+          firstInvalidField = field;
+        }
+        if (!fieldValid) {
+          isValid = false;
+        }
+      }
+    });
+
+    if (firstInvalidField) {
+      const group = cachedGroups[firstInvalidField.id];
+      if (group) {
+        group.classList.add('shake');
+        setTimeout(() => group.classList.remove('shake'), 400);
+      }
+      firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      firstInvalidField.focus();
+    }
+
+    return isValid;
+  }
+
   // Real-time validation on blur
   Object.keys(validationRules).forEach((fieldId) => {
     const field = document.getElementById(fieldId);
@@ -325,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Clear error on input
       field.addEventListener("input", () => {
-        const group = field.closest(".floating-group");
+        const group = cachedGroups[fieldId];
         if (group && group.classList.contains("has-error")) {
           group.classList.remove("has-error");
           field.classList.remove("has-error");
@@ -344,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Set loading state
-    setLoading(true);
+    setLoading(true, submitBtn);
 
     // 🛡️ Sentinel: Add timeout to external API calls to prevent UI hanging
     const controller = new AbortController();
@@ -365,15 +282,15 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (response.ok) {
-        showSuccess();
+        showSuccess(form, successMessage, errorMessage);
       } else {
         throw new Error('Form submission failed');
       }
     } catch (error) {
-      showError('There was an error sending your message. Please try again or email us directly at hello@collarworkdesign.com');
+      showError('There was an error sending your message. Please try again or email us directly at hello@collarworkdesign.com', form, successMessage, errorMessage);
     } finally {
       clearTimeout(timeoutId);
-      setLoading(false);
+      setLoading(false, submitBtn);
     }
   });
 
@@ -414,11 +331,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+}
+
 // Export for testing
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     validationRules,
     validateField,
-    validateForm,
-  };
+      };
 }
