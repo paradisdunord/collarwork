@@ -48,3 +48,8 @@
 **Vulnerability:** The sanitization logic for `href` attributes in `lang.js` used a blocklist (blocking `javascript:` and `data:`) which could be bypassed by obscure or older protocols like `vbscript:` or `file:`.
 **Learning:** Relying on blocklists for input sanitization is inherently risky as it is difficult to anticipate all possible attack vectors or obscure features browsers might support.
 **Prevention:** Always use a strict allowlist for sensitive attributes like `href`. For protocols, only permit explicitly allowed schemes (e.g., `http:`, `https:`, `mailto:`, `tel:`) while continuing to allow relative URLs.
+
+## 2026-07-14 - X-Content-Type-Options Security Theater
+**Vulnerability:** The `X-Content-Type-Options: nosniff` directive was defined in a `<meta>` tag across all HTML files. This is ineffective as modern browsers ignore this directive when set via `<meta>`, rendering it mere security theater.
+**Learning:** Security headers that govern MIME type sniffing and content framing must be delivered as actual HTTP response headers. Statically hosted sites on platforms like Cloudflare Pages must configure these using their respective configuration files (e.g., `_headers`).
+**Prevention:** Remove ineffective `<meta>` tags for headers like `X-Content-Type-Options` and implement them correctly as HTTP response headers using a `_headers` file for Cloudflare Pages.
