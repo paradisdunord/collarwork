@@ -53,3 +53,8 @@
 **Vulnerability:** The `X-Content-Type-Options: nosniff` directive was defined in a `<meta>` tag across all HTML files. This is ineffective as modern browsers ignore this directive when set via `<meta>`, rendering it mere security theater.
 **Learning:** Security headers that govern MIME type sniffing and content framing must be delivered as actual HTTP response headers. Statically hosted sites on platforms like Cloudflare Pages must configure these using their respective configuration files (e.g., `_headers`).
 **Prevention:** Remove ineffective `<meta>` tags for headers like `X-Content-Type-Options` and implement them correctly as HTTP response headers using a `_headers` file for Cloudflare Pages.
+
+## 2026-07-21 - Leveraging `_headers` for Cloudflare Pages Security
+**Vulnerability:** The application relied on client-side frame-busting scripts for clickjacking protection, assuming environment limitations (like GitHub Pages). This was suboptimal as client-side scripts can be bypassed. Furthermore, the site lacked robust transport layer security enforcement (HSTS).
+**Learning:** For static sites deployed on Cloudflare Pages, robust native HTTP security headers (e.g., `X-Frame-Options`, `Strict-Transport-Security`, `Permissions-Policy`, `Referrer-Policy`) can and should be configured via the `_headers` file rather than relying on less secure client-side workarounds.
+**Prevention:** Always utilize platform-specific configuration files (like `_headers` in Cloudflare Pages) to enforce strong HTTP security headers, providing defense-in-depth and mitigating the need for easily bypassable client-side security mechanisms.
