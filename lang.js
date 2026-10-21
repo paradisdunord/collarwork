@@ -364,7 +364,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 let cachedElements = null;
-let cachedPlaceholders = null;
 let cachedMetaDesc = null;
 let cachedOgDesc = null;
 let cachedTwitterDesc = null;
@@ -442,16 +441,7 @@ function setLanguage(lang) {
     }
   });
 
-  // Translate all elements with data-i18n-placeholder
-  if (!cachedPlaceholders) {
-    cachedPlaceholders = document.querySelectorAll('[data-i18n-placeholder]');
-  }
-  cachedPlaceholders.forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    if (Object.prototype.hasOwnProperty.call(currentTranslations, key)) {
-      el.placeholder = currentTranslations[key];
-    }
-  });
+
 
   // Translate Meta Description
   if (!isMetaCached) {
