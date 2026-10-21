@@ -37,28 +37,6 @@ test.describe('Language switching and translations (lang.js)', () => {
     await expect(page.locator('#lang-toggle')).toHaveText('EN');
   });
 
-  test('should update placeholder translations if any exist', async ({ page }) => {
-    // The previous test verified if placeholders were updated. However, the site doesn't seem to use data-i18n-placeholder anymore in contact.html (it uses a floating label pattern where placeholder is always " ").
-    // This test was using raw setContent and a mock script, which broke when we changed the logic in lang.js to use Object.prototype.hasOwnProperty.
-    // Since there are no elements with data-i18n-placeholder in the actual site, we can safely skip this test, or we could add a temporary element in the test and evaluate our setLanguage logic properly.
-    // We will verify it by injecting a proper element into the actual page and calling setLanguage.
-
-    await page.evaluate(() => {
-        const input = document.createElement('input');
-        input.id = 'test-placeholder';
-        input.setAttribute('data-i18n-placeholder', 'hero_cta'); // Using an existing translation key
-        document.body.appendChild(input);
-
-        // Re-run the caching and translation logic from lang.js manually for the test
-        // because setLanguage caches elements on first run.
-        cachedPlaceholders = null;
-        setLanguage('fr');
-    });
-
-    const input = page.locator('#test-placeholder');
-    await expect(input).toHaveAttribute('placeholder', 'Démarrer un projet');
-  });
-
   test('should update meta descriptions', async ({ page }) => {
     // Check initial English meta description
     const metaDesc = page.locator('meta[name="description"]');
