@@ -15,9 +15,6 @@ if (typeof window !== 'undefined') {
   window.easeOutBack = easeOutBack;
 }
 
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { easeOutBack };
-}
 
 
 // Anti-Clickjacking: Frame-busting script
@@ -25,7 +22,7 @@ if (typeof module !== 'undefined' && module.exports) {
 // and CSP <meta> tags don't support the frame-ancestors directive.
 if (typeof window !== 'undefined' && window.top !== window.self) {
   // Hide content immediately in case top.location redirect is blocked by sandbox attributes
-  document.documentElement.style.display = 'none';
+  if (document.documentElement) document.documentElement.style.display = 'none';
   window.top.location = window.self.location;
 }
 
