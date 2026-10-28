@@ -419,6 +419,12 @@ function sanitizeToFragment(html) {
 }
 
 function setLanguage(lang) {
+  // Validate against safelist to prevent Object Prototype Pollution
+  const validLangs = ['en', 'fr'];
+  if (!validLangs.includes(lang)) {
+    return;
+  }
+
   // Store preference
   localStorage.setItem('collarwork_lang', lang);
   document.documentElement.lang = lang === 'en' ? 'en' : 'fr-CA';
@@ -436,7 +442,7 @@ function setLanguage(lang) {
   cachedElements.forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (Object.prototype.hasOwnProperty.call(currentTranslations, key)) {
-      // Use innerHTML because some translations contain `<br>` or `<i>` tags
+      // Use sanitizeToFragment to securely render translations containing HTML tags like `<br>` or `<i>`
       el.replaceChildren(sanitizeToFragment(currentTranslations[key]));
     }
   });
