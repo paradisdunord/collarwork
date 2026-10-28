@@ -46,37 +46,20 @@ const validationRules = {
   },
 };
 
-/**
- * Validate a single field
- */
-function validateField(field, cachedGroups = {}, cachedErrorEls = {}) {
-  const rules = validationRules[field.id];
-  if (!rules) return true;
 
-  const value = field.value ? field.value.trim() : '';
+function checkFieldValidity(value, rules) {
+  if (rules.required && !value) return false;
+  if (rules.minLength && value.length < rules.minLength) return false;
+  if (rules.pattern && !rules.pattern.test(value)) return false;
+  return true;
+}
+
+function updateFieldUI(field, isValid, rules, cachedGroups, cachedErrorEls) {
   if (!cachedGroups[field.id] && field.closest) {
     cachedGroups[field.id] = field.closest('.floating-group');
   }
   const group = cachedGroups[field.id];
-  let isValid = true;
-  let errorMessage = rules.errorMessage;
 
-  // Check required
-  if (rules.required && !value) {
-    isValid = false;
-  }
-
-  // Check minimum length
-  if (isValid && rules.minLength && value.length < rules.minLength) {
-    isValid = false;
-  }
-
-  // Check pattern (email)
-  if (isValid && rules.pattern && !rules.pattern.test(value)) {
-    isValid = false;
-  }
-
-  // Update UI
   if (group && field) {
     if (!isValid) {
       group.classList.add('has-error');
@@ -88,19 +71,34 @@ function validateField(field, cachedGroups = {}, cachedErrorEls = {}) {
       }
       const errorEl = cachedErrorEls[field.id];
       if (errorEl) {
-        errorEl.textContent = errorMessage;
+        errorEl.textContent = rules.errorMessage;
       }
     } else {
       group.classList.remove('has-error');
       field.classList.remove('has-error');
+      const value = field.value ? field.value.trim() : '';
       if (value) {
         field.classList.add('is-valid');
       }
     }
   }
+}
+
+/**
+ * Validate a single field
+ */
+function validateField(field, cachedGroups = {}, cachedErrorEls = {}) {
+  const rules = validationRules[field.id];
+  if (!rules) return true;
+
+  const value = field.value ? field.value.trim() : '';
+  const isValid = checkFieldValidity(value, rules);
+
+  updateFieldUI(field, isValid, rules, cachedGroups, cachedErrorEls);
 
   return isValid;
 }
+
 
 // Expose for testing
 if (typeof module !== 'undefined' && module.exports) {
