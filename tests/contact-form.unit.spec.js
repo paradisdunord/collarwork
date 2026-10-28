@@ -7,7 +7,7 @@ global.document = {
   getElementById: () => null
 };
 
-const { validationRules, validateField } = require('../contact-form.js');
+const { validationRules, validateField, showSuccess } = require('../contact-form.js');
 
 describe('Contact Form Validation (Unit)', () => {
   let mockField;
@@ -140,4 +140,57 @@ describe('Contact Form Validation (Unit)', () => {
       assert.strictEqual(isValid, true);
     });
   });
+
+  describe('showSuccess Function', () => {
+    let mockForm, mockSuccessMsg, mockErrorMsg;
+
+    beforeEach(() => {
+      const createMockElement = (initialClasses = []) => {
+        const classes = new Set(initialClasses);
+        return {
+          classList: {
+            add: (cls) => classes.add(cls),
+            remove: (cls) => classes.delete(cls),
+          },
+          classes,
+          scrollIntoView: function(opts) { this.scrollOpts = opts; },
+          scrollOpts: null
+        };
+      };
+
+      mockForm = createMockElement();
+      mockSuccessMsg = createMockElement();
+      // Initialize error message with 'is-visible' to test its removal
+      mockErrorMsg = createMockElement(['is-visible']);
+    });
+
+    test('should add is-hidden to form, is-visible to success msg, and remove is-visible from error msg', () => {
+      // Pre-condition: Error message has 'is-visible'
+      assert.ok(mockErrorMsg.classes.has('is-visible'));
+
+      showSuccess(mockForm, mockSuccessMsg, mockErrorMsg);
+
+      assert.ok(mockForm.classes.has('is-hidden'));
+      assert.ok(mockSuccessMsg.classes.has('is-visible'));
+      // Post-condition: Error message no longer has 'is-visible'
+      assert.ok(!mockErrorMsg.classes.has('is-visible'));
+    });
+
+    test('should scroll success message into view smoothly', () => {
+      showSuccess(mockForm, mockSuccessMsg, mockErrorMsg);
+      assert.deepStrictEqual(mockSuccessMsg.scrollOpts, { behavior: 'smooth', block: 'start' });
+    });
+
+    test('should return early if any element is missing', () => {
+      // should not throw error
+      showSuccess(null, mockSuccessMsg, mockErrorMsg);
+      showSuccess(mockForm, null, mockErrorMsg);
+      showSuccess(mockForm, mockSuccessMsg, null);
+      showSuccess(undefined, undefined, undefined);
+
+      // assert no changes were made to mock elements when one is missing
+      assert.strictEqual(mockSuccessMsg.classes.size, 0);
+    });
+  });
+
 });
