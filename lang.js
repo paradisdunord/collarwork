@@ -371,6 +371,7 @@ let isMetaCached = false;
 
 // Security whitelists for sanitizeToFragment
 const allowedTags = new Set(['BR', 'EM', 'I', 'SPAN', 'A']);
+const xssRegex = /[\x00-\x20\s]+/g;
 const allowedAttributes = new Set(['class', 'href', 'target', 'rel']);
 
 
@@ -390,7 +391,7 @@ function sanitizeToFragment(html) {
           node.removeAttribute(attr.name);
         } else if (attr.name === 'href') {
           // 🛡️ Sentinel: Enhance XSS protection using a strict protocol allowlist instead of a blocklist
-          const strippedValue = attr.value.replace(/[\x00-\x20\s]+/g, '').toLowerCase();
+          const strippedValue = attr.value.replace(xssRegex, '').toLowerCase();
 
           // Check if it has a protocol (contains ':')
           if (strippedValue.includes(':')) {
