@@ -12,6 +12,11 @@ global.document = {
   querySelector: () => null,
   querySelectorAll: () => []
 };
+global.document.documentElement = {
+  style: {
+    display: ''
+  }
+};
 
 const { easeOutBack } = require('../main.js');
 

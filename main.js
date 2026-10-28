@@ -117,13 +117,24 @@ function initCursorReveal() {
   if (kineticList && cursorImg) {
     const items = kineticList.querySelectorAll('.kinetic-item');
     
+    let ticking = false;
+    let latestX = 0;
+    let latestY = 0;
+
     // Mouse tracking over the entire list area
     kineticList.addEventListener('mousemove', (e) => {
       // Use clientX/Y for fixed positioning against the viewport
-      const x = e.clientX;
-      const y = e.clientY;
-      cursorImg.style.left = `${x}px`;
-      cursorImg.style.top = `${y}px`;
+      latestX = e.clientX;
+      latestY = e.clientY;
+
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          cursorImg.style.left = `${latestX}px`;
+          cursorImg.style.top = `${latestY}px`;
+          ticking = false;
+        });
+        ticking = true;
+      }
     });
 
     items.forEach(item => {
