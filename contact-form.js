@@ -124,13 +124,25 @@ function setLoading(loading, submitBtn) {
 }
 
 /**
+ * Helper to update form visibility state
+ */
+function updateUIState(form, successMessage, errorMessage, options) {
+  if (!form || !successMessage || !errorMessage) return false;
+
+  const { hideForm = false, showSuccess = false, showError = false } = options || {};
+
+  form.classList.toggle("is-hidden", hideForm);
+  successMessage.classList.toggle("is-visible", showSuccess);
+  errorMessage.classList.toggle("is-visible", showError);
+
+  return true;
+}
+
+/**
  * Show success state
  */
 function showSuccess(form, successMessage, errorMessage) {
-  if (!form || !successMessage || !errorMessage) return;
-  form.classList.add("is-hidden");
-  successMessage.classList.add("is-visible");
-  errorMessage.classList.remove("is-visible");
+  if (!updateUIState(form, successMessage, errorMessage, { hideForm: true, showSuccess: true })) return;
 
   // Scroll to top of form container
   successMessage.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -140,10 +152,7 @@ function showSuccess(form, successMessage, errorMessage) {
  * Show error state
  */
 function showError(message, form, successMessage, errorMessage) {
-  if (!form || !successMessage || !errorMessage) return;
-  form.classList.add("is-hidden");
-  errorMessage.classList.add("is-visible");
-  successMessage.classList.remove("is-visible");
+  if (!updateUIState(form, successMessage, errorMessage, { hideForm: true, showError: true })) return;
 
   const errorMsgEl = document.getElementById("error-message");
   if (errorMsgEl && message) {
@@ -157,11 +166,9 @@ function showError(message, form, successMessage, errorMessage) {
  * Reset form to initial state
  */
 function resetForm(form, successMessage, errorMessage) {
-  if (!form || !successMessage || !errorMessage) return;
+  if (!updateUIState(form, successMessage, errorMessage, { hideForm: false, showSuccess: false, showError: false })) return;
+
   form.reset();
-  form.classList.remove("is-hidden");
-  successMessage.classList.remove("is-visible");
-  errorMessage.classList.remove("is-visible");
 
   // Clear all validation states
   form.querySelectorAll(".floating-input").forEach((input) => {
