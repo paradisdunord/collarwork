@@ -185,10 +185,23 @@ describe('sanitizeToFragment (Unit)', () => {
     const a4 = new MockNode(global.Node.ELEMENT_NODE, 'A');
     a4.attributes = [{ name: 'href', value: 'HTTPS://SAFE.COM' }];
 
+    // New tests
+    const a5 = new MockNode(global.Node.ELEMENT_NODE, 'A');
+    a5.attributes = [{ name: 'href', value: 'invalid:protocol' }];
+
+    const a6 = new MockNode(global.Node.ELEMENT_NODE, 'A');
+    a6.attributes = [{ name: 'href', value: "\x00javascript:alert(1)" }];
+
+    const a7 = new MockNode(global.Node.ELEMENT_NODE, 'A');
+    a7.attributes = [{ name: 'href', value: '/about.html' }];
+
     template.content.appendChild(a1);
     template.content.appendChild(a2);
     template.content.appendChild(a3);
     template.content.appendChild(a4);
+    template.content.appendChild(a5);
+    template.content.appendChild(a6);
+    template.content.appendChild(a7);
 
     const originalCreateElement = global.document.createElement;
     global.document.createElement = (tag) => tag === 'template' ? template : originalCreateElement(tag);
@@ -200,6 +213,10 @@ describe('sanitizeToFragment (Unit)', () => {
     assert.strictEqual(a3.attributes.length, 0, 'Should block javascript: with whitespace/newlines');
     assert.strictEqual(a4.attributes.length, 1, 'Should allow https:');
     assert.strictEqual(a4.attributes[0].value, 'HTTPS://SAFE.COM');
+    assert.strictEqual(a5.attributes.length, 0, 'Should block invalid protocol:');
+    assert.strictEqual(a6.attributes.length, 0, 'Should block control characters');
+    assert.strictEqual(a7.attributes.length, 1, 'Should allow relative paths without a protocol');
+    assert.strictEqual(a7.attributes[0].value, '/about.html');
 
     global.document.createElement = originalCreateElement;
   });
