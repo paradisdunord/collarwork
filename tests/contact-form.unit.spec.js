@@ -141,3 +141,38 @@ describe('Contact Form Validation (Unit)', () => {
     });
   });
 });
+
+describe('Loading State Validation', () => {
+  const { setLoading } = require('../contact-form.js');
+  let mockSubmitBtn;
+
+  beforeEach(() => {
+    mockSubmitBtn = {
+      classList: {
+        add: (cls) => mockSubmitBtn.classes.add(cls),
+        remove: (cls) => mockSubmitBtn.classes.delete(cls)
+      },
+      classes: new Set(),
+      disabled: false
+    };
+  });
+
+  test('should not throw error if submitBtn is not provided', () => {
+    assert.doesNotThrow(() => setLoading(true, null));
+  });
+
+  test('should add is-loading class and disable button when loading is true', () => {
+    setLoading(true, mockSubmitBtn);
+    assert.ok(mockSubmitBtn.classes.has('is-loading'));
+    assert.strictEqual(mockSubmitBtn.disabled, true);
+  });
+
+  test('should remove is-loading class and enable button when loading is false', () => {
+    mockSubmitBtn.classes.add('is-loading');
+    mockSubmitBtn.disabled = true;
+
+    setLoading(false, mockSubmitBtn);
+    assert.ok(!mockSubmitBtn.classes.has('is-loading'));
+    assert.strictEqual(mockSubmitBtn.disabled, false);
+  });
+});
