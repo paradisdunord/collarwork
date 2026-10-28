@@ -372,6 +372,7 @@ let isMetaCached = false;
 // Security whitelists for sanitizeToFragment
 const allowedTags = new Set(['BR', 'EM', 'I', 'SPAN', 'A']);
 const allowedAttributes = new Set(['class', 'href', 'target', 'rel']);
+const allowedProtocols = ['http:', 'https:', 'mailto:', 'tel:'];
 
 
 function sanitizeToFragment(html) {
@@ -394,7 +395,6 @@ function sanitizeToFragment(html) {
 
           // Check if it has a protocol (contains ':')
           if (strippedValue.includes(':')) {
-            const allowedProtocols = ['http:', 'https:', 'mailto:', 'tel:'];
             const hasAllowedProtocol = allowedProtocols.some(protocol => strippedValue.startsWith(protocol));
 
             if (!hasAllowedProtocol) {
