@@ -110,16 +110,18 @@ describe('sanitizeToFragment (Unit)', () => {
     const originalCreateElement = global.document.createElement;
     global.document.createElement = (tag) => tag === 'template' ? template : originalCreateElement(tag);
 
-    sanitizeToFragment('...ignored...');
+    try {
+      sanitizeToFragment('...ignored...');
 
-    assert.strictEqual(template.content.childNodes.length, 5);
-    assert.strictEqual(template.content.childNodes[0].tagName, 'EM');
-    assert.strictEqual(template.content.childNodes[1].tagName, 'BR');
-    assert.strictEqual(template.content.childNodes[2].tagName, 'I');
-    assert.strictEqual(template.content.childNodes[3].tagName, 'SPAN');
-    assert.strictEqual(template.content.childNodes[4].tagName, 'A');
-
-    global.document.createElement = originalCreateElement;
+      assert.strictEqual(template.content.childNodes.length, 5);
+      assert.strictEqual(template.content.childNodes[0].tagName, 'EM');
+      assert.strictEqual(template.content.childNodes[1].tagName, 'BR');
+      assert.strictEqual(template.content.childNodes[2].tagName, 'I');
+      assert.strictEqual(template.content.childNodes[3].tagName, 'SPAN');
+      assert.strictEqual(template.content.childNodes[4].tagName, 'A');
+    } finally {
+      global.document.createElement = originalCreateElement;
+    }
   });
 
   test('should remove unsafe tags (e.g. SCRIPT, DIV, IMG)', () => {
@@ -135,10 +137,13 @@ describe('sanitizeToFragment (Unit)', () => {
     const originalCreateElement = global.document.createElement;
     global.document.createElement = (tag) => tag === 'template' ? template : originalCreateElement(tag);
 
-    sanitizeToFragment('...ignored...');
+    try {
+      sanitizeToFragment('...ignored...');
 
-    assert.strictEqual(template.content.childNodes.length, 0);
-    global.document.createElement = originalCreateElement;
+      assert.strictEqual(template.content.childNodes.length, 0);
+    } finally {
+      global.document.createElement = originalCreateElement;
+    }
   });
 
   test('should allow safe attributes (class, href, target, rel)', () => {
@@ -157,17 +162,19 @@ describe('sanitizeToFragment (Unit)', () => {
     const originalCreateElement = global.document.createElement;
     global.document.createElement = (tag) => tag === 'template' ? template : originalCreateElement(tag);
 
-    sanitizeToFragment('...ignored...');
+    try {
+      sanitizeToFragment('...ignored...');
 
-    assert.strictEqual(a.attributes.length, 4);
-    assert.ok(a.attributes.find(attr => attr.name === 'href'));
-    assert.ok(a.attributes.find(attr => attr.name === 'class'));
-    assert.ok(a.attributes.find(attr => attr.name === 'target'));
-    assert.ok(a.attributes.find(attr => attr.name === 'rel'));
-    assert.ok(!a.attributes.find(attr => attr.name === 'onclick'));
-    assert.ok(!a.attributes.find(attr => attr.name === 'style'));
-
-    global.document.createElement = originalCreateElement;
+      assert.strictEqual(a.attributes.length, 4);
+      assert.ok(a.attributes.find(attr => attr.name === 'href'));
+      assert.ok(a.attributes.find(attr => attr.name === 'class'));
+      assert.ok(a.attributes.find(attr => attr.name === 'target'));
+      assert.ok(a.attributes.find(attr => attr.name === 'rel'));
+      assert.ok(!a.attributes.find(attr => attr.name === 'onclick'));
+      assert.ok(!a.attributes.find(attr => attr.name === 'style'));
+    } finally {
+      global.document.createElement = originalCreateElement;
+    }
   });
 
   test('should block malicious URI schemes in href', () => {
@@ -193,15 +200,17 @@ describe('sanitizeToFragment (Unit)', () => {
     const originalCreateElement = global.document.createElement;
     global.document.createElement = (tag) => tag === 'template' ? template : originalCreateElement(tag);
 
-    sanitizeToFragment('...ignored...');
+    try {
+      sanitizeToFragment('...ignored...');
 
-    assert.strictEqual(a1.attributes.length, 0, 'Should block javascript:');
-    assert.strictEqual(a2.attributes.length, 0, 'Should block data:');
-    assert.strictEqual(a3.attributes.length, 0, 'Should block javascript: with whitespace/newlines');
-    assert.strictEqual(a4.attributes.length, 1, 'Should allow https:');
-    assert.strictEqual(a4.attributes[0].value, 'HTTPS://SAFE.COM');
-
-    global.document.createElement = originalCreateElement;
+      assert.strictEqual(a1.attributes.length, 0, 'Should block javascript:');
+      assert.strictEqual(a2.attributes.length, 0, 'Should block data:');
+      assert.strictEqual(a3.attributes.length, 0, 'Should block javascript: with whitespace/newlines');
+      assert.strictEqual(a4.attributes.length, 1, 'Should allow https:');
+      assert.strictEqual(a4.attributes[0].value, 'HTTPS://SAFE.COM');
+    } finally {
+      global.document.createElement = originalCreateElement;
+    }
   });
 
   test('should handle nested elements and text nodes', () => {
@@ -220,15 +229,17 @@ describe('sanitizeToFragment (Unit)', () => {
     const originalCreateElement = global.document.createElement;
     global.document.createElement = (tag) => tag === 'template' ? template : originalCreateElement(tag);
 
-    sanitizeToFragment('...ignored...');
+    try {
+      sanitizeToFragment('...ignored...');
 
-    assert.strictEqual(template.content.childNodes.length, 1);
-    assert.strictEqual(span.childNodes.length, 1); // script removed
-    assert.strictEqual(span.childNodes[0].tagName, 'EM');
-    assert.strictEqual(em.childNodes.length, 1);
-    assert.strictEqual(em.childNodes[0].nodeType, global.Node.TEXT_NODE);
-
-    global.document.createElement = originalCreateElement;
+      assert.strictEqual(template.content.childNodes.length, 1);
+      assert.strictEqual(span.childNodes.length, 1); // script removed
+      assert.strictEqual(span.childNodes[0].tagName, 'EM');
+      assert.strictEqual(em.childNodes.length, 1);
+      assert.strictEqual(em.childNodes[0].nodeType, global.Node.TEXT_NODE);
+    } finally {
+      global.document.createElement = originalCreateElement;
+    }
   });
 
   test('should remove elements that are not allowed even if they contain allowed ones', () => {
@@ -242,10 +253,12 @@ describe('sanitizeToFragment (Unit)', () => {
     const originalCreateElement = global.document.createElement;
     global.document.createElement = (tag) => tag === 'template' ? template : originalCreateElement(tag);
 
-    sanitizeToFragment('...ignored...');
+    try {
+      sanitizeToFragment('...ignored...');
 
-    assert.strictEqual(template.content.childNodes.length, 0, 'DIV should be removed along with its children');
-
-    global.document.createElement = originalCreateElement;
+      assert.strictEqual(template.content.childNodes.length, 0, 'DIV should be removed along with its children');
+    } finally {
+      global.document.createElement = originalCreateElement;
+    }
   });
 });
